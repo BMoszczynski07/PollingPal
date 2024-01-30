@@ -37,3 +37,13 @@ PollingPal is a full-stack platform developed using Next.js and Spring Boot, des
 
 - **Database:**
   - Utilizes MariaDB for storing survey data and user information.
+
+- **Mobile app:**
+  - Developed in Java using Android Studio IDE
+
+## Getting started
+  1. clone all repositories
+  2. 1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/your-username/PollingPal.git
+   cd PollingPal 
