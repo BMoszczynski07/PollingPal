@@ -53,6 +53,7 @@ PollingPal is a full-stack platform developed using Next.js and Spring Boot, des
   npm i
   ```
   3. Run application:
-     ```
-     npm run dev
-     ```
+  ```
+  npm run dev
+  ```
+  4. Enjoy!
