@@ -7,7 +7,7 @@ PollingPal is a full-stack platform developed using Next.js and Spring Boot, des
 - license -> includes the MIT lincense and documentation
 - mobile -> includes mobile application
 - web -> includes web application
-- API -> includes API for CRUD operations on polls
+- API -> includes API built in Spring Boot for CRUD operations on polls
 
 ## Features
 
