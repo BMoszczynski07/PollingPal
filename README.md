@@ -44,5 +44,15 @@ PollingPal is a full-stack platform developed using Next.js and Spring Boot, des
 ## Getting started
   1. Clone the Repository:
    ```bash
-   git clone https://github.com/your-username/PollingPal.git
-   cd PollingPal 
+   git clone https://github.com/BMoszczynski07/PollingPal.git
+   cd PollingPal
+   ```
+  2. Install all dependencies for web application:
+  ```
+  git branch web
+  npm i
+  ```
+  3. Run application:
+     ```
+     npm run dev
+     ```
