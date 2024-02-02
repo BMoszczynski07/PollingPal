@@ -78,6 +78,7 @@
             android:gravity="start"
             android:textColor="#c70c4d"
             android:text="Lubię to (20)"
+            android:onClick="pollLike"
             />
 
         <TextView
@@ -86,6 +87,7 @@
             android:gravity="end"
             android:textColor="#0f79ba"
             android:text="Komentarze (13)"
+            android:onClick="showComments"
             />
     </LinearLayout>
 
