@@ -36,7 +36,7 @@ PollingPal is a full-stack platform (NextJS + TailwindCSS + Spring Boot) designe
   - Developed using [Spring Boot](https://spring.io/projects/spring-boot) to handle server-side logic and database interactions.
 
 - **Database:**
-  - Utilizes MariaDB for storing survey data and user information.
+  - Utilizes [MariaDB](https://mariadb.org/) for storing survey data and user information.
 
 - **Mobile app:**
   - Developed in Java using Android Studio IDE
