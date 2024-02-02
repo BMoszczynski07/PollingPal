@@ -4,7 +4,7 @@
 PollingPal is a full-stack platform (NextJS + TailwindCSS + Spring Boot) designed for creating and commenting on surveys anonymously or using user accounts.
 
 ## Branches
-- license -> includes the MIT lincense and documentation
+- license -> includes the MIT license and documentation
 - mobile -> includes mobile application
 - web -> includes web application
 - API -> includes API built in Spring Boot for CRUD operations on polls
