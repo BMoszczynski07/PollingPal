@@ -36,12 +36,14 @@
                 android:layout_height="45dp"
                 android:layout_marginRight="10dp"
                 android:onClick="findPolls"
+                android:backgroundTint="@color/black"
                 android:text="Wyszukaj ankietę" />
 
             <Button
                 android:layout_width="160dp"
                 android:layout_height="45dp"
                 android:onClick="switchToAddPollPage"
+                android:backgroundTint="@color/black"
                 android:text="+ Dodaj ankietę" />
 
         </LinearLayout>
@@ -52,15 +54,16 @@
             android:layout_marginTop="20dp">
 
             <LinearLayout
+                android:id="@+id/site_polls_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include layout="@layout/poll" />
+                <include layout="@layout/loading" />
 
-                <include layout="@layout/poll" />
-
-                <include layout="@layout/poll" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
 
             </LinearLayout>
 

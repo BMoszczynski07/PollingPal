@@ -17,7 +17,7 @@
             android:textColor="#fff"
             android:gravity="center"
             android:padding="8dp"
-            android:background="#3081a1"
+            android:background="@drawable/rounded_corners_dark_gray"
             android:layout_margin="8dp"
             android:onClick="selectOption(0, 0)"
             />
@@ -30,7 +30,7 @@
             android:textColor="#fff"
             android:padding="8dp"
             android:gravity="center"
-            android:background="#3081a1"
+            android:background="@drawable/rounded_corners_dark_gray"
             android:layout_margin="8dp"
             android:onClick="selectOption(0, 0)"
             />

@@ -3,25 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="12dp"
-    android:layout_marginRight="12dp"
-    android:layout_marginBottom="12dp"
-    android:layout_marginLeft="32dp"
-    android:padding="8dp"
-    android:background="#95c7e6"
+    android:layout_margin="12dp"
+    android:padding="12dp"
+    android:background="@drawable/rounded_corners"
     >
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-
+        
         <View
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="#000"
             />
-
+        
         <LinearLayout
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -29,26 +26,12 @@
             android:layout_marginLeft="8dp"
             >
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="7pt"
-                    android:text="Lorem ipsum"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="7pt"
-                    android:textColor="#6b6b6b"
-                    android:layout_marginLeft="2pt"
-                    android:text="@loremipsum1"
-                    />
-            </LinearLayout>
+                android:textSize="7pt"
+                android:text="Lorem ipsum"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -59,16 +42,8 @@
                 />
 
         </LinearLayout>
-
+        
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#2171a3"
-        android:textSize="8pt"
-        android:text="W odpowiedzi @Loremipsum1"
-        />
 
     <TextView
         android:layout_width="match_parent"
@@ -84,8 +59,8 @@
         android:layout_marginTop="5dp"
         >
         <ImageView
-            android:layout_width="12pt"
-            android:layout_height="12pt"
+            android:layout_width="8pt"
+            android:layout_height="8pt"
             android:src="@drawable/heart_solid" />
 
         <TextView
@@ -99,8 +74,8 @@
             />
 
         <ImageView
-            android:layout_width="12pt"
-            android:layout_height="12pt"
+            android:layout_width="8pt"
+            android:layout_height="8pt"
             android:src="@drawable/message_solid"
             />
 

@@ -6,7 +6,8 @@
     android:layout_margin="12dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#9eccde"
+    android:background="@drawable/rounded_corners"
+    android:padding="8dp"
     >
 
     <LinearLayout

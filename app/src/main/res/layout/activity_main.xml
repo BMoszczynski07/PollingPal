@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:background="#69aec9"
+        android:background="#d9d9d9"
         android:gravity="center">
 
         <!-- Napis -->
@@ -31,6 +31,7 @@
             android:text="Zaloguj się"
             android:textSize="12dp"
             android:layout_marginRight="2pt"
+            android:backgroundTint="@color/black"
             android:onClick="switchToLoginPage"
             />
 
@@ -39,6 +40,7 @@
             android:layout_height="42dp"
             android:textSize="12dp"
             android:text="Zarejestruj się"
+            android:backgroundTint="@color/black"
             android:onClick="switchToRegisterPage"
             />
 
@@ -47,5 +49,6 @@
     <include layout="@layout/comments_section" />
 
     <include layout="@layout/main_page" />
+
 
 </LinearLayout>
