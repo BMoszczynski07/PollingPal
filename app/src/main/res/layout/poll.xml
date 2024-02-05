@@ -6,6 +6,7 @@
     android:layout_margin="12dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/poll"
     android:background="@drawable/rounded_corners"
     android:padding="8dp"
     >
@@ -29,12 +30,14 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/poll_user"
                 android:text="Bartosz Moszczyński" />
 
             <TextView
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:textColor="#787878"
+                android:id="@+id/poll_date"
                 android:text="02.02.2024" />
         </LinearLayout>
 
@@ -53,11 +56,13 @@
         android:layout_margin="8dp"
         android:gravity="center"
         android:layout_height="wrap_content">
+<!--   TODO: Change the layout of this. Instead of "Lubię to" add heart icon and instead of "Komentarze" add a comment icon     -->
         <TextView
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:textColor="#c70c4d"
+            android:id="@+id/poll_hearts"
             android:text="Lubię to (20)"
             android:onClick="pollLike"
             />
@@ -67,6 +72,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:textColor="#0f79ba"
+            android:id="@+id/poll_comments"
             android:text="Komentarze (13)"
             android:onClick="showComments"
             />
