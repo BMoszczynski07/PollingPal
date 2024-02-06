@@ -2,7 +2,7 @@ package com.example.pollingpal.Pages;
 
 import android.app.Activity;
 import android.content.Context;
-import android.opengl.Visibility;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,7 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pollingpal.MainActivity;
 import com.example.pollingpal.Models.Poll;
@@ -21,15 +21,11 @@ import com.example.pollingpal.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MainPage extends MainActivity {
-    ArrayList<Poll> pollsList;
+    int minusDays = 14;
+    ArrayList<Poll> pollsList = new ArrayList<>();
     private Context context;
 
     public MainPage(Context context) {
@@ -41,11 +37,16 @@ public class MainPage extends MainActivity {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout sitePollsContainer = ((Activity) context).findViewById(R.id.site_polls_container);
 
-
         for (Poll poll : pollsList) {
             View pollLayout = inflater.inflate(R.layout.poll, sitePollsContainer, false);
 
             TextView pollUser = pollLayout.findViewById(R.id.poll_user);
+            TextView pollDate = pollLayout.findViewById(R.id.poll_date);
+
+            pollUser.setText(poll.user);
+            pollDate.setText(poll.poll_date);
+
+            sitePollsContainer.addView(pollLayout);
         }
     }
 
@@ -55,38 +56,43 @@ public class MainPage extends MainActivity {
 
         site_loading.setVisibility(View.GONE);
 
-        String requestURL = API + "/get-polls";
+        String requestURL = API + "/get-polls/" + minusDays;
 
         try {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, requestURL, null,
-                    new Response.Listener<JSONArray>() {
+            JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, requestURL, null,
+                    new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONArray response) {
-                            // Obsługa odpowiedzi z serwera
-                            // Przetwarzanie odpowiedzi -> zamień na ArrayList i dodaj do listy pollsList
+                        public void onResponse(JSONObject response) {
+                            try {
+                                int httpCode = response.getInt("http");
 
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONObject pollObj = response.getJSONObject(i);
-                                    Poll pollElem = new Poll(pollObj);
+                                if (httpCode == 200) {
+                                    JSONArray res = response.getJSONArray("res");
 
-                                    pollsList.add(pollElem);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    site_db_error.setVisibility(View.VISIBLE);
+                                    for (int i = 0; i < res.length(); i++) {
+                                        JSONObject resPoll = res.getJSONObject(i);
+                                        Poll pollElem = new Poll(resPoll);
+
+                                        pollsList.add(pollElem);
+                                    }
+
+                                    appendPollsToLayout();
+                                } else {
+
                                 }
+                            } catch (JSONException e) {
+                                Log.d("JSONException", e.toString());
+                                site_db_error.setVisibility(View.VISIBLE);
                             }
-
-                            appendPollsToLayout();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             // Obsługa błędu w przypadku nieudanej odpowiedzi z serwera
-                            error.printStackTrace();
+                            Log.d("error2", error.toString());
                             site_db_error.setVisibility(View.VISIBLE);
                         }
                     });
@@ -94,6 +100,7 @@ public class MainPage extends MainActivity {
             // Dodanie żądania do kolejki
             requestQueue.add(jsonArrayRequest);
         } catch (Exception e) {
+            Log.d("error3", e.toString());
             site_db_error.setVisibility(View.VISIBLE);
         }
     }
