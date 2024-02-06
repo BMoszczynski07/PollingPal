@@ -14,6 +14,7 @@ public class PollsMapper implements RowMapper<Poll> {
         poll.setId(resultSet.getInt("Id"));
         poll.setUser_id(resultSet.getInt("user_id"));
         poll.setUser(resultSet.getString("user"));
+        poll.setUser(resultSet.getString("profile_pic"));
         poll.setPoll_date(resultSet.getString("poll_date"));
         poll.setPoll_question(resultSet.getString("poll_question"));
         poll.setPoll_hearts(resultSet.getInt("poll_hearts"));

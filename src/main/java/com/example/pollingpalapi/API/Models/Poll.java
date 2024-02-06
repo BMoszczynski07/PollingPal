@@ -13,4 +13,5 @@ public class Poll {
     public String poll_question;
     public int poll_hearts;
     public int poll_comments;
+    public String profile_pic;
 }
