@@ -1,4 +1,4 @@
-package com.example.pollingpalapi.API.DTO;
+package com.example.pollingpalapi.API.Models;
 
 public class Response<T> {
     public int http;
