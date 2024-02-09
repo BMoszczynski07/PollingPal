@@ -1,5 +1,7 @@
 package com.example.pollingpal.Models;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +26,7 @@ public class Poll {
             this.poll_comments = obj.getInt("poll_comments");
             this.poll_date = obj.getString("poll_date");
         } catch (JSONException e) {
+            Log.d("error", e.toString());
             e.printStackTrace();
         }
     }

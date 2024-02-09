@@ -2,22 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/poll_options"
+    android:id="@+id/poll_option"
+    android:visibility="visible"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        android:id="@+id/poll_options_container"
-        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="7pt"
             android:text="Opcja 1"
-            android:id="@+id/poll_option"
+            android:id="@+id/poll_option_text"
             android:textColor="#fff"
             android:gravity="center"
             android:padding="8dp"
@@ -25,6 +18,4 @@
             android:layout_margin="8dp"
             android:onClick="selectOption(0, 0)"
             />
-    </LinearLayout>
-
 </LinearLayout>

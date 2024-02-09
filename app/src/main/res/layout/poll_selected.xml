@@ -3,15 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:visibility="visible"
+    android:visibility="gone"
+    android:padding="8dp"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,6 +23,7 @@
                 android:layout_width="7pt"
                 android:layout_height="7pt"
                 android:src="@drawable/check_solid"
+                android:visibility="visible"
                 />
         </LinearLayout>
 
@@ -36,38 +32,5 @@
             android:layout_height="15dp"
             android:layout_marginTop="2dp"
             android:background="#3081a1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Opcja 2 · 40%"
-                android:layout_marginRight="5dp"
-                />
-
-            <ImageView
-                android:layout_width="7pt"
-                android:layout_height="7pt"
-                android:src="@drawable/check_solid"
-                />
-        </LinearLayout>
-
-        <View
-            android:layout_width="80dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="2dp"
-            android:background="#3081a1" />
-    </LinearLayout>
 
 </LinearLayout>
