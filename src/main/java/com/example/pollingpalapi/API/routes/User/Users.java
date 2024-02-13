@@ -30,7 +30,7 @@ public class Users {
                 return new Response<String>(404, "Nie znaleziono użytkownika o takich danych");
             }
 
-            if (!PasswordUtil.checkPassword(userDTO.pass, foundUsers.get(0).getPass())) {
+            if (!PasswordUtil.matchPassword(userDTO.pass, foundUsers.get(0).getPass())) {
                 return new Response<String>(401, "Podano błędne dane logowania");
             }
 
