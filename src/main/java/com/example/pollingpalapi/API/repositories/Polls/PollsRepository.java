@@ -1,8 +1,9 @@
 package com.example.pollingpalapi.API.repositories.Polls;
 
+import com.example.pollingpalapi.API.Mappers.Polls.OptionMapper;
 import com.example.pollingpalapi.API.Mappers.Polls.PollsMapper;
-import com.example.pollingpalapi.API.Models.Poll;
-import com.example.pollingpalapi.API.Models.Response;
+import com.example.pollingpalapi.API.Models.Polls.Option;
+import com.example.pollingpalapi.API.Models.Polls.Poll;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +22,7 @@ public class PollsRepository {
         LocalDate currentDate = LocalDate.now();
         LocalDate pastDate = currentDate.minusDays(minusDays);
 
-        String sql = "SELECT polls.*, users.username AS user " +
+        String sql = "SELECT polls.*, users.username AS user, users.profile_pic AS profile_pic " +
                 "FROM polls " +
                 "INNER JOIN users ON polls.user_id = users.id " +
                 "WHERE polls.poll_date >= ? AND polls.poll_date <= ? " +
@@ -30,6 +31,24 @@ public class PollsRepository {
         List<Poll> selectedPolls = jdbc.query(sql, new Object[]{pastDate, pastDate.plusDays(14)}, new PollsMapper());
 
         Collections.shuffle(selectedPolls);
+
+        return selectedPolls;
+    }
+
+    public List<Option> getPollOptions(int pollId) {
+        String sql = "SELECT * FROM poll_options WHERE poll_id = ?";
+
+        List<Option> selectedOptions = jdbc.query(sql, new Object[]{pollId}, new OptionMapper());
+
+        return selectedOptions;
+    }
+
+    public List<Poll> searchPolls(String searchText) {
+        String searchParam = "%" + searchText + "%";
+
+        String sql = "SELECT polls.*, users.username AS user, users.profile_pic AS profile_pic FROM polls INNER JOIN users ON polls.user_id = users.id WHERE polls.poll_question LIKE ? OR users.username LIKE ? ORDER BY polls.poll_hearts DESC LIMIT 25";
+
+        List<Poll> selectedPolls = jdbc.query(sql, new Object[]{searchParam, searchParam}, new PollsMapper());
 
         return selectedPolls;
     }

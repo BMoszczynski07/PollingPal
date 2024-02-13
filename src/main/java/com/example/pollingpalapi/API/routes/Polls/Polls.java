@@ -1,12 +1,12 @@
 package com.example.pollingpalapi.API.routes.Polls;
 
-import com.example.pollingpalapi.API.Models.Poll;
-import com.example.pollingpalapi.API.Models.Response;
+import com.example.pollingpalapi.API.Models.Polls.Option;
+import com.example.pollingpalapi.API.Models.Polls.Poll;
+import com.example.pollingpalapi.API.Models.Response.Response;
+import com.example.pollingpalapi.API.Models.Polls.SearchDTO;
 import com.example.pollingpalapi.API.repositories.Polls.PollsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +19,17 @@ public class Polls {
         this.polls = polls;
     }
 
+    @PostMapping("/search-polls")
+    public Response<Object> searchPolls(@RequestBody SearchDTO search) {
+        try {
+            List<Poll> selectedPolls = polls.searchPolls(search.getContent());
+
+            return new Response<Object>(200, selectedPolls);
+        } catch (Exception e) {
+            return new Response<Object>(500, "Wystąpił problem techniczny! \n " + e.getMessage());
+        }
+    }
+
     @GetMapping("/get-polls/{lastDays}")
     public Response<Object> getPolls(@PathVariable int lastDays) {
         try {
@@ -27,6 +38,17 @@ public class Polls {
             return new Response<Object>(200, selectedPolls);
         } catch (Exception e) {
             return new Response<Object>(500, "Wystąpił problem techniczny! \n " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-poll-options/{pollId}")
+    public Response<Object> getPollsOptions(@PathVariable int pollId) {
+        try {
+            List<Option> selectedOptions = polls.getPollOptions(pollId);
+
+            return new Response<Object>(200, selectedOptions);
+        } catch (Exception e) {
+            return new Response<Object>(500, "Wystąpił problem techniczny! \n" + e.getMessage());
         }
     }
 }

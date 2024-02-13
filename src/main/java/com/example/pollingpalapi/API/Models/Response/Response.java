@@ -1,4 +1,4 @@
-package com.example.pollingpalapi.API.Models;
+package com.example.pollingpalapi.API.Models.Response;
 
 public class Response<T> {
     public int http;
