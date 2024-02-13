@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +38,102 @@ public class MainPage extends MainActivity {
     public MainPage(Context context) {
         // TODO: fetch to API, convert list into ArrayList and add polls
         this.context = context;
+
+        Button searchBtn = ((Activity) context).findViewById(R.id.search_polls_btn);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchPolls(view);
+            }
+        });
+    }
+
+    public void searchPolls(View view) {
+        EditText searchInput = ((Activity) context).findViewById(R.id.search_polls);
+        String searchText = searchInput.getText().toString();
+
+        View site_db_error = ((Activity) context).findViewById(R.id.site_db_error);
+        LinearLayout pollsContainer = ((Activity) context).findViewById(R.id.site_polls_container);
+
+        View pollsLoading = ((Activity) context).findViewById(R.id.site_loading);
+
+        pollsContainer.removeAllViews();
+        site_db_error.setVisibility(View.GONE);
+        pollsLoading.setVisibility(View.VISIBLE);
+
+        pollsList.clear();
+
+        Log.d("searching polls", "searching polls...");
+
+        JSONObject poll = new JSONObject();
+
+        try {
+            poll.put("content", searchText);
+        } catch (JSONException e) {
+            Log.d("jsonexceptionerror", e.toString());
+        }
+
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            String requestURL = API + "/search-polls";
+
+            Log.d("doing request", "doing request...");
+
+            JsonObjectRequest pollsReq = new JsonObjectRequest(Request.Method.POST, requestURL, poll,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.d("response", "response");
+
+                                pollsLoading.setVisibility(View.GONE);
+
+                                int httpCode = response.getInt("http");
+
+                                if (httpCode == 200) {
+                                    JSONArray res = response.getJSONArray("res");
+
+                                    for (int i = 0; i < res.length(); i++) {
+                                        JSONObject resPoll = res.getJSONObject(i);
+                                        Poll pollElem = new Poll(resPoll);
+
+                                        pollsList.add(pollElem);
+                                    }
+
+                                    appendPollsToLayout();
+                                } else {
+                                    Log.d("err res", response.toString());
+                                    pollsLoading.setVisibility(View.GONE);
+                                    site_db_error.setVisibility(View.VISIBLE);
+                                }
+                            } catch (JSONException e) {
+                                Log.d("JSONException", e.toString());
+                                pollsLoading.setVisibility(View.GONE);
+                                site_db_error.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("res err", error.toString());
+                            pollsLoading.setVisibility(View.GONE);
+                            site_db_error.setVisibility(View.VISIBLE);
+                        }
+                    }
+            );
+
+            requestQueue.add(pollsReq);
+        } catch (Exception e) {
+            Log.d("jsonexception", e.toString());
+            pollsLoading.setVisibility(View.GONE);
+            site_db_error.setVisibility(View.VISIBLE);
+        }
+
+        Log.d("click", "click");
     }
 
     public void appendOptions(LinearLayout optionsContainer, ArrayList<Option> optionsArray) {
@@ -126,7 +224,11 @@ public class MainPage extends MainActivity {
 //            TODO: return the arraylist of options for polls and loop through them
             LinearLayout options = pollLayout.findViewById(R.id.poll_options);
 
+            // if (user nie zaznaczył opcji w ankiecie) {
             fetchOptions(options, poll.id);
+            // } else if (user zaznaczył opcję w ankiecie) {
+
+            // }
 
 //            for (Option option : pollOptions) {
 //                View pollOptionLayout = inflater.inflate(R.layout.poll_select, sitePollsContainer, false);

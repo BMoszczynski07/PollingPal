@@ -22,6 +22,7 @@
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:id="@+id/search_polls"
             android:hint="Treść ankiety..." />
 
 
@@ -35,8 +36,9 @@
                 android:layout_width="165dp"
                 android:layout_height="45dp"
                 android:layout_marginRight="10dp"
-                android:onClick="findPolls"
+                android:onClick="searchPolls"
                 android:backgroundTint="@color/black"
+                android:id="@+id/search_polls_btn"
                 android:text="Wyszukaj ankietę" />
 
             <Button
@@ -54,7 +56,6 @@
             android:layout_marginTop="20dp">
 
             <LinearLayout
-                android:id="@+id/site_polls_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -63,6 +64,13 @@
                 <include layout="@layout/db_error_layout" />
 
                 <include layout="@layout/loading" />
+
+                <LinearLayout
+                    android:id="@+id/site_polls_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    ></LinearLayout>
 
             </LinearLayout>
 
