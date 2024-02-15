@@ -34,12 +34,31 @@ public class MainPage extends MainActivity {
     int minusDays = 14;
     ArrayList<Poll> pollsList = new ArrayList<>();
     private Context context;
+    public LoginPage loginPage;
+
+    public MainPage() {}
 
     public MainPage(Context context) {
         // TODO: fetch to API, convert list into ArrayList and add polls
         this.context = context;
 
+        View mainPageView = ((Activity) context).findViewById(R.id.site_main_page);
+        View commentsSection = ((Activity) context).findViewById(R.id.site_comments_section);
+        View loginPageView = ((Activity) context).findViewById(R.id.site_login_page);
+
+        loginPageView.setVisibility(View.GONE);
+        commentsSection.setVisibility(View.GONE);
+        mainPageView.setVisibility(View.VISIBLE);
+
         Button searchBtn = ((Activity) context).findViewById(R.id.search_polls_btn);
+        Button loginBtn = ((Activity) context).findViewById(R.id.site_login);
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginPage = new LoginPage(context);
+            }
+        });
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
