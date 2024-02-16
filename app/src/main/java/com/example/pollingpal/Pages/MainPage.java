@@ -43,12 +43,12 @@ public class MainPage extends MainActivity {
         this.context = context;
 
         View mainPageView = ((Activity) context).findViewById(R.id.site_main_page);
-        View commentsSection = ((Activity) context).findViewById(R.id.site_comments_section);
         View loginPageView = ((Activity) context).findViewById(R.id.site_login_page);
 
         loginPageView.setVisibility(View.GONE);
-        commentsSection.setVisibility(View.GONE);
         mainPageView.setVisibility(View.VISIBLE);
+
+        Log.d("redirecting", "redirecting to main page...");
 
         Button searchBtn = ((Activity) context).findViewById(R.id.search_polls_btn);
         Button loginBtn = ((Activity) context).findViewById(R.id.site_login);

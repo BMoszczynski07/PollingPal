@@ -3,28 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center|right"
+    android:visibility="gone"
+    android:id="@+id/site_user_logged"
     >
 
     <ImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
+        android:id="@+id/site_user_pic"
         />
 
     <TextView
+        android:id="@+id/site_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="6pt"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text="Bartosz Moszczyński"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="6pt"
-        android:layout_marginRight="5dp"
-        android:text="Wyloguj się"
         />
 
 </LinearLayout>

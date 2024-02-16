@@ -25,6 +25,8 @@
             android:layout_marginRight="5pt"
             android:layout_gravity="center_vertical" />
 
+        <include layout="@layout/user_logged" />
+
         <include layout="@layout/login_btns" />
 
     </LinearLayout>
