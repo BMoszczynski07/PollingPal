@@ -21,7 +21,6 @@ public class Polls {
 
     @PostMapping("/like-poll")
     public Response<Object> likePoll(@RequestBody int pollId) {
-        System.out.println("test");
         return new Response<Object>(200, "success");
     }
 
