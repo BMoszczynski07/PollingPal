@@ -19,6 +19,11 @@ public class Polls {
         this.polls = polls;
     }
 
+    @PostMapping("/like-poll")
+    public Response<Object> likePoll(@RequestBody int pollId) {
+        return new Response<Object>(200, "success");
+    }
+
     @PostMapping("/search-polls")
     public Response<Object> searchPolls(@RequestBody SearchDTO search) {
         try {
