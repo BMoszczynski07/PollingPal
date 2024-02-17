@@ -230,7 +230,7 @@ public class MainPage extends MainActivity {
 
             JSONObject pollLike = new JSONObject();
 
-            String requestURL = API + "/like-post";
+            String requestURL = API + "/like-poll";
 
             try {
                 pollLike.put("pollId", pollId);
