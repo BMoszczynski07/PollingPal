@@ -1,4 +1,4 @@
-package com.example.pollingpalapi.API.routes.User;
+package com.example.pollingpalapi.API.routes.Users;
 
 import com.example.pollingpalapi.API.Models.Response.Response;
 import com.example.pollingpalapi.API.Models.User.User;

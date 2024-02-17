@@ -16,7 +16,7 @@ public class UserRepository {
     }
 
     public List<User> findUser(String login) {
-        String sql = "SELECT * FROM users WHERE unique_id = ?";
+        String sql = "SELECT * FROM users WHERE unique_id = ? AND verified = 1";
 
         List<User> foundUsers = jdbc.query(sql, new Object[]{login}, new UsersMapper());
 
