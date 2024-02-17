@@ -1,7 +1,7 @@
 # PollingPal Documentation
 
 ## Overview
-PollingPal is a full-stack platform (NextJS + TailwindCSS + Spring Boot + MariaDB) designed for creating and commenting on surveys anonymously or using user accounts.
+PollingPal is a full-stack platform (NextJS + Spring Boot + MariaDB) designed for creating and commenting on surveys anonymously or using user accounts.
 
 ## Branches
 - license -> includes the MIT license and documentation
