@@ -35,6 +35,7 @@ public class MainPage extends MainActivity {
     ArrayList<Poll> pollsList = new ArrayList<>();
     private Context context;
     public LoginPage loginPage;
+    ArrayList<Integer> likedPollsIds = new ArrayList<>();
 
     public MainPage() {}
 
@@ -223,6 +224,53 @@ public class MainPage extends MainActivity {
         }
     }
 
+    public void likePoll(View pollLayout, int pollId) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            JSONObject pollLike = new JSONObject();
+
+            String requestURL = API + "/like-post";
+
+            try {
+                pollLike.put("pollId", pollId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("JSONException", e.toString());
+            }
+
+            JsonObjectRequest likeReq = new JsonObjectRequest(Request.Method.POST, requestURL, pollLike,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                int httpCode = response.getInt("http");
+
+                                if (httpCode == 200) {
+                                    TextView pollLikes = pollLayout.findViewById(R.id.poll_hearts);
+                                    pollLikes.setText(String.valueOf(response.getInt("res")));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d("JSONException", e.toString());
+                            }
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.d("volleyError", error.toString());
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Error", e.toString());
+        }
+    }
+
     public void appendPollsToLayout() {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout sitePollsContainer = ((Activity) context).findViewById(R.id.site_polls_container);
@@ -234,11 +282,25 @@ public class MainPage extends MainActivity {
             TextView pollUser = pollLayout.findViewById(R.id.poll_user);
             TextView pollDate = pollLayout.findViewById(R.id.poll_date);
             TextView pollQuestion = pollLayout.findViewById(R.id.poll_question);
+            TextView pollHearts = pollLayout.findViewById(R.id.poll_hearts);
+            TextView pollComments = pollLayout.findViewById(R.id.poll_comments);
+
+            LinearLayout pollHeartsContainer = pollLayout.findViewById(R.id.poll_hearts_container);
+            LinearLayout pollCommentsContainer = pollLayout.findViewById(R.id.poll_comments_container);
 
             Picasso.get().load(poll.profile_pic).into(pollPic);
             pollUser.setText(poll.user);
             pollDate.setText(poll.poll_date);
             pollQuestion.setText(poll.poll_question);
+            pollHearts.setText(String.valueOf(poll.poll_hearts));
+            pollComments.setText(String.valueOf(poll.poll_comments));
+
+            pollHeartsContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    likePoll(pollLayout, poll.id);
+                }
+            });
 
 //            TODO: return the arraylist of options for polls and loop through them
             LinearLayout options = pollLayout.findViewById(R.id.poll_options);
