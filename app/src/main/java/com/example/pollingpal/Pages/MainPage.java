@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.pollingpal.MainActivity;
 import com.example.pollingpal.Models.Option;
 import com.example.pollingpal.Models.Poll;
+import com.example.pollingpal.Models.User;
 import com.example.pollingpal.R;
 import com.squareup.picasso.Picasso;
 
@@ -36,10 +37,13 @@ public class MainPage extends MainActivity {
     private Context context;
     public LoginPage loginPage;
     ArrayList<Integer> likedPollsIds = new ArrayList<>();
+    public User user;
 
     public MainPage() {}
 
-    public MainPage(Context context) {
+    public MainPage(Context context, User user) {
+        this.user = user;
+
         // TODO: fetch to API, convert list into ArrayList and add polls
         this.context = context;
 
@@ -53,6 +57,8 @@ public class MainPage extends MainActivity {
 
         Button searchBtn = ((Activity) context).findViewById(R.id.search_polls_btn);
         Button loginBtn = ((Activity) context).findViewById(R.id.site_login);
+
+        fetchPolls();
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,6 +240,7 @@ public class MainPage extends MainActivity {
 
             try {
                 pollLike.put("pollId", pollId);
+                pollLike.put("userId", user.id);
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("JSONException", e.toString());
@@ -248,7 +255,15 @@ public class MainPage extends MainActivity {
 
                                 if (httpCode == 200) {
                                     TextView pollLikes = pollLayout.findViewById(R.id.poll_hearts);
-                                    pollLikes.setText(String.valueOf(response.getInt("res")));
+
+                                    int like = response.getInt("res");
+
+                                    if (like == 1) {
+                                        pollLikes.setText(String.valueOf(Integer.parseInt(pollLikes.getText().toString()) + 1));
+                                        return;
+                                    }
+
+                                    pollLikes.setText(String.valueOf(Integer.parseInt(pollLikes.getText().toString()) - 1));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -265,6 +280,8 @@ public class MainPage extends MainActivity {
                         }
                     }
             );
+
+            requestQueue.add(likeReq);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("Error", e.toString());
@@ -275,6 +292,8 @@ public class MainPage extends MainActivity {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout sitePollsContainer = ((Activity) context).findViewById(R.id.site_polls_container);
 
+        sitePollsContainer.removeAllViews();
+
         for (Poll poll : pollsList) {
             View pollLayout = inflater.inflate(R.layout.poll, sitePollsContainer, false);
 
@@ -283,17 +302,14 @@ public class MainPage extends MainActivity {
             TextView pollDate = pollLayout.findViewById(R.id.poll_date);
             TextView pollQuestion = pollLayout.findViewById(R.id.poll_question);
             TextView pollHearts = pollLayout.findViewById(R.id.poll_hearts);
-            TextView pollComments = pollLayout.findViewById(R.id.poll_comments);
 
             LinearLayout pollHeartsContainer = pollLayout.findViewById(R.id.poll_hearts_container);
-            LinearLayout pollCommentsContainer = pollLayout.findViewById(R.id.poll_comments_container);
 
             Picasso.get().load(poll.profile_pic).into(pollPic);
             pollUser.setText(poll.user);
             pollDate.setText(poll.poll_date);
             pollQuestion.setText(poll.poll_question);
             pollHearts.setText(String.valueOf(poll.poll_hearts));
-            pollComments.setText(String.valueOf(poll.poll_comments));
 
             pollHeartsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override

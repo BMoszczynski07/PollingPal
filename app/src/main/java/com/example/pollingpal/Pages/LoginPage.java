@@ -60,7 +60,7 @@ public class LoginPage extends MainActivity {
         returnToMainPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainPage = new MainPage(context);
+                mainPage = new MainPage(context, null);
             }
         });
     }
@@ -99,13 +99,13 @@ public class LoginPage extends MainActivity {
                                         siteLoginError.setVisibility(View.GONE);
 
                                         JSONArray res = response.getJSONArray("res");
-                                        user = new User(res.getJSONObject(0));
+                                        User user = new User(res.getJSONObject(0));
 
                                         Log.d("res", res.toString());
                                         Log.d("resObj", res.getJSONObject(0).toString());
                                         Log.d("userObj", user != null ? user.toString() : "null");
 
-                                        mainPage = new MainPage(context);
+                                        mainPage = new MainPage(context, user);
 
                                         View loginBtns = ((Activity) context).findViewById(R.id.site_login_btns);
                                         View userLogged = ((Activity) context).findViewById(R.id.site_user_logged);
