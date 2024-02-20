@@ -1,5 +1,6 @@
 package com.example.pollingpalapi.API.routes.Polls;
 
+import com.example.pollingpalapi.API.Models.Polls.Like;
 import com.example.pollingpalapi.API.Models.Polls.Option;
 import com.example.pollingpalapi.API.Models.Polls.Poll;
 import com.example.pollingpalapi.API.Models.Response.Response;
@@ -20,8 +21,23 @@ public class Polls {
     }
 
     @PostMapping("/like-poll")
-    public Response<Object> likePoll(@RequestBody int pollId) {
-        return new Response<Object>(200, "success");
+    public Response likePoll(@RequestBody Like like) {
+        try {
+            List<Like> findLike = polls.findLike(like);
+
+            if (findLike.size() > 0) {
+                polls.removeLike(like);
+
+                return new Response<Integer>(200, 0);
+            }
+
+            polls.addLike(like);
+
+            return new Response<Integer>(200, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<Object>(500, "Wystąpił problem techniczny " + e.toString());
+        }
     }
 
     @PostMapping("/search-polls")
@@ -42,6 +58,7 @@ public class Polls {
 
             return new Response<Object>(200, selectedPolls);
         } catch (Exception e) {
+            e.printStackTrace();
             return new Response<Object>(500, "Wystąpił problem techniczny! \n " + e.getMessage());
         }
     }

@@ -12,6 +12,5 @@ public class Poll {
     private String poll_date;
     private String poll_question;
     private int poll_hearts;
-    private int poll_comments;
     private String profile_pic;
 }
