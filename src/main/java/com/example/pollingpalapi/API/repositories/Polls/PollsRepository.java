@@ -3,9 +3,11 @@ package com.example.pollingpalapi.API.repositories.Polls;
 import com.example.pollingpalapi.API.Mappers.Polls.LikeMapper;
 import com.example.pollingpalapi.API.Mappers.Polls.OptionMapper;
 import com.example.pollingpalapi.API.Mappers.Polls.PollsMapper;
+import com.example.pollingpalapi.API.Mappers.Polls.VoteMapper;
 import com.example.pollingpalapi.API.Models.Polls.Like;
 import com.example.pollingpalapi.API.Models.Polls.Option;
 import com.example.pollingpalapi.API.Models.Polls.Poll;
+import com.example.pollingpalapi.API.Models.Polls.Vote;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -35,28 +37,35 @@ public class PollsRepository {
     public List<Like> findLike (Like like) {
         String sql = "SELECT * FROM poll_hearts WHERE poll_id = ? AND user_id = ?";
 
-        List<Like> query = jdbc.query(sql, new Object[]{like.getPollId(), like.getUserId()}, new LikeMapper());
+        List<Like> likeQuery = jdbc.query(sql, new Object[]{like.getPollId(), like.getUserId()}, new LikeMapper());
 
-        return query;
+        return likeQuery;
     }
 
     public List<Poll> getPolls(int minusDays) {
         LocalDate currentDate = LocalDate.now();
         LocalDate pastDate = currentDate.minusDays(minusDays);
 
-        String sql = "SELECT polls.*, users.username AS user, users.profile_pic AS profile_pic, COUNT(poll_hearts.id) AS hearts\n" +
-                "FROM polls\n" +
-                "INNER JOIN users ON polls.user_id = users.id\n" +
-                "LEFT JOIN poll_hearts ON polls.id = poll_hearts.poll_id\n" +
-                "WHERE polls.poll_date >= ? AND polls.poll_date <= ?\n" +
-                "GROUP BY polls.id, users.id\n" +
+        String sql = "SELECT p.*, u.username AS user, u.profile_pic AS profile_pic, COUNT(DISTINCT ph.id) " +
+                "AS hearts, COUNT(DISTINCT pc.id) AS comments FROM polls p " +
+                "INNER JOIN users u ON p.user_id = u.id " +
+                "LEFT JOIN poll_hearts ph ON p.id = ph.poll_id " +
+                "LEFT JOIN poll_comments pc ON p.id = pc.poll_id " +
+                "WHERE p.poll_date <= ? AND p.poll_date >= ? " +
+                "GROUP BY p.id " +
                 "ORDER BY hearts DESC LIMIT 25";
 
-        List<Poll> selectedPolls = jdbc.query(sql, new Object[]{pastDate, pastDate.plusDays(14)}, new PollsMapper());
+        List<Poll> selectedPolls = jdbc.query(sql, new PollsMapper(), new Object[]{currentDate, pastDate});
 
         Collections.shuffle(selectedPolls);
 
         return selectedPolls;
+    }
+
+    public List<Vote> getOptionVotes(int optionId) {
+        String sql = "SELECT * FROM poll_votes WHERE option_id = ?";
+
+        return jdbc.query(sql, new VoteMapper(), new Object[]{optionId});
     }
 
     public List<Option> getPollOptions(int pollId) {
@@ -70,7 +79,14 @@ public class PollsRepository {
     public List<Poll> searchPolls(String searchText) {
         String searchParam = "%" + searchText + "%";
 
-        String sql = "SELECT polls.*, users.username AS user, users.profile_pic AS profile_pic, count(poll_hearts.id) AS hearts FROM polls INNER JOIN poll_hearts ON polls.id = poll_hearts.poll_id INNER JOIN users ON polls.user_id = users.id WHERE polls.poll_question LIKE ? OR users.username LIKE ? ORDER BY hearts DESC LIMIT 25";
+        String sql = "SELECT p.*, u.username AS user, u.profile_pic AS profile_pic, COUNT(DISTINCT ph.id) " +
+                "AS hearts, COUNT(DISTINCT pc.id) AS comments FROM polls p " +
+                "INNER JOIN users u ON p.user_id = u.id " +
+                "LEFT JOIN poll_hearts ph ON p.id = ph.poll_id " +
+                "LEFT JOIN poll_comments pc ON p.id = pc.poll_id " +
+                "WHERE p.poll_question LIKE ? OR u.username LIKE ? " +
+                "GROUP BY p.id " +
+                "ORDER BY hearts DESC LIMIT 25";
 
         List<Poll> selectedPolls = jdbc.query(sql, new Object[]{searchParam, searchParam}, new PollsMapper());
 

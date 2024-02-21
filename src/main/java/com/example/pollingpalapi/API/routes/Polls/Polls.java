@@ -5,10 +5,13 @@ import com.example.pollingpalapi.API.Models.Polls.Option;
 import com.example.pollingpalapi.API.Models.Polls.Poll;
 import com.example.pollingpalapi.API.Models.Response.Response;
 import com.example.pollingpalapi.API.Models.Polls.SearchDTO;
+import com.example.pollingpalapi.API.Models.Polls.Vote;
+import com.example.pollingpalapi.API.Models.Polls.VoteForOption;
 import com.example.pollingpalapi.API.repositories.Polls.PollsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,11 +28,17 @@ public class Polls {
         try {
             List<Like> findLike = polls.findLike(like);
 
-            if (findLike.size() > 0) {
+            System.out.println(findLike.toString());
+
+            if (!findLike.isEmpty()) {
                 polls.removeLike(like);
+
+                System.out.println("removing like...");
 
                 return new Response<Integer>(200, 0);
             }
+
+            System.out.println("adding like...");
 
             polls.addLike(like);
 
@@ -51,10 +60,10 @@ public class Polls {
         }
     }
 
-    @GetMapping("/get-polls/{lastDays}")
-    public Response<Object> getPolls(@PathVariable int lastDays) {
+    @GetMapping("/get-polls/{minusDays}")
+    public Response<Object> getPolls(@PathVariable int minusDays) {
         try {
-            List<Poll> selectedPolls = polls.getPolls(lastDays);
+            List<Poll> selectedPolls = polls.getPolls(minusDays);
 
             return new Response<Object>(200, selectedPolls);
         } catch (Exception e) {
@@ -63,13 +72,34 @@ public class Polls {
         }
     }
 
+    @GetMapping("/get-option-votes/{pollId}")
+    public Response<Object> getOptionVotes(@PathVariable int pollId) {
+        try {
+            List<Option> pollOptions = polls.getPollOptions(pollId);
+
+            ArrayList<VoteForOption> votes = new ArrayList<VoteForOption>();
+
+            for (Option option : pollOptions) {
+                List<Vote> votesForOption = polls.getOptionVotes(option.getId());
+
+                votes.add(new VoteForOption(option.getPoll_option(), votesForOption.size()));
+            }
+
+            return new Response<Object>(200, votes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<Object>(500, "Wystapił problem techniczny \n " + e.toString());
+        }
+    }
+
     @GetMapping("/get-poll-options/{pollId}")
-    public Response<Object> getPollsOptions(@PathVariable int pollId) {
+    public Response<Object> getPollOptions(@PathVariable int pollId) {
         try {
             List<Option> selectedOptions = polls.getPollOptions(pollId);
 
             return new Response<Object>(200, selectedOptions);
         } catch (Exception e) {
+            e.printStackTrace();
             return new Response<Object>(500, "Wystąpił problem techniczny! \n" + e.getMessage());
         }
     }
