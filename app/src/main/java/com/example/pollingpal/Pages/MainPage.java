@@ -21,6 +21,7 @@ import com.example.pollingpal.MainActivity;
 import com.example.pollingpal.Models.Option;
 import com.example.pollingpal.Models.Poll;
 import com.example.pollingpal.Models.User;
+import com.example.pollingpal.Models.VoteForOption;
 import com.example.pollingpal.R;
 import com.squareup.picasso.Picasso;
 
@@ -162,6 +163,140 @@ public class MainPage extends MainActivity {
         Log.d("click", "click");
     }
 
+    public void appendVotes(LinearLayout optionsContainer, ArrayList<VoteForOption> votes) {
+        optionsContainer.removeAllViews();
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if (votes.isEmpty()) {
+            View optionSelectedView = inflater.inflate(R.layout.no_votes, optionsContainer, false);
+
+            optionsContainer.addView(optionSelectedView);
+
+            return;
+        }
+
+        int votesQty = 0;
+
+        for (VoteForOption vote : votes)
+            votesQty += vote.votesQty;
+
+        for (VoteForOption vote : votes) {
+            View optionSelectedView = inflater.inflate(R.layout.poll_selected, optionsContainer, false);
+
+            double optionPercentage = Math.floor(((float) vote.votesQty / votesQty) * 100);
+
+            TextView optionSelectedText = optionSelectedView.findViewById(R.id.poll_option_selected_text);
+            optionSelectedText.setText(vote.option + " · " + optionPercentage + "%");
+
+            View optionBar = optionSelectedView.findViewById(R.id.poll_option_selected_bar);
+
+            int optionBarWidth = 200 * vote.votesQty / votesQty;
+
+            optionBar.getLayoutParams().width = optionBarWidth;
+
+            optionsContainer.addView(optionSelectedView);
+        }
+
+    }
+
+    public void getVotes(LinearLayout optionsContainer, int pollId) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            String requestURL = API + "/get-votes/" + pollId;
+
+            JsonObjectRequest voteReq = new JsonObjectRequest(Request.Method.GET, requestURL, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                int httpCode = response.getInt("http");
+
+                                if (httpCode == 200) {
+                                    JSONArray res = response.getJSONArray("res");
+                                    ArrayList<VoteForOption> votes = new ArrayList<>();
+
+                                    for (int i = 0; i < res.length(); i++) {
+                                        VoteForOption vote = new VoteForOption(res.getJSONObject(i));
+
+                                        votes.add(vote);
+                                    }
+
+                                    appendVotes(optionsContainer, votes);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d("JSONException", e.toString());
+                            }
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.d("Error", error.toString());
+                        }
+                    }
+            );
+
+            requestQueue.add(voteReq);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Error", e.toString());
+        }
+    }
+
+    public void voteForOption (Option option, LinearLayout optionsContainer) {
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            JSONObject optionObject = new JSONObject();
+
+            String requestURL = API + "/vote-for-option";
+
+            try {
+                optionObject.put("optionId", option.id);
+                optionObject.put("userId", user.id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("JSONException", e.toString());
+            }
+
+            JsonObjectRequest voteReq = new JsonObjectRequest(Request.Method.POST, requestURL, optionObject,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                int httpCode = response.getInt("http");
+
+                                if (httpCode == 200) {
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d("JSONException", e.toString());
+                            }
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.d("Error", error.toString());
+                        }
+                    }
+            );
+
+            requestQueue.add(voteReq);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("error", e.toString());
+        }
+    }
+
     public void appendOptions(LinearLayout optionsContainer, ArrayList<Option> optionsArray) {
         Log.d("options", optionsArray.toString());
 
@@ -171,6 +306,13 @@ public class MainPage extends MainActivity {
 
             TextView optionText = optionView.findViewById(R.id.poll_option_text);
             optionText.setText(option.poll_option);
+
+            optionView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    voteForOption(option, optionsContainer);
+                }
+            });
 
             optionsContainer.addView(optionView);
         }
@@ -302,14 +444,17 @@ public class MainPage extends MainActivity {
             TextView pollDate = pollLayout.findViewById(R.id.poll_date);
             TextView pollQuestion = pollLayout.findViewById(R.id.poll_question);
             TextView pollHearts = pollLayout.findViewById(R.id.poll_hearts);
+            TextView pollComments = pollLayout.findViewById(R.id.poll_comments);
 
             LinearLayout pollHeartsContainer = pollLayout.findViewById(R.id.poll_hearts_container);
+            LinearLayout pollCommentsContainer = pollLayout.findViewById(R.id.poll_comments_container);
 
             Picasso.get().load(poll.profile_pic).into(pollPic);
             pollUser.setText(poll.user);
             pollDate.setText(poll.poll_date);
             pollQuestion.setText(poll.poll_question);
             pollHearts.setText(String.valueOf(poll.poll_hearts));
+            pollComments.setText(String.valueOf(poll.poll_comments));
 
             pollHeartsContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -322,9 +467,9 @@ public class MainPage extends MainActivity {
             LinearLayout options = pollLayout.findViewById(R.id.poll_options);
 
             // if (user nie zaznaczył opcji w ankiecie) {
-            fetchOptions(options, poll.id);
+//              fetchOptions(options, poll.id);
             // } else if (user zaznaczył opcję w ankiecie) {
-
+                getVotes(options, poll.id);
             // }
 
 //            for (Option option : pollOptions) {
