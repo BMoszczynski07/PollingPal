@@ -60,14 +60,9 @@ public class Polls {
     @PostMapping("/add-vote")
     public Response<Object> addVote(@RequestBody OptionDTO option) {
         try {
-            List<Integer> getPollId = polls.getPollId(option.getOptionId());
-            Integer pollId = getPollId.get(0);
+            String vote = polls.addUserVote(option.getOptionId(), option.getUserId());
 
-            polls.removeUserVote(pollId, option.getUserId());
-
-            polls.addUserVote(pollId, option.getOptionId(), option.getUserId());
-
-            return new Response<Object>(200, "Dodano głos");
+            return new Response<Object>(200, vote);
         } catch (Exception e) {
             e.printStackTrace();
             return new Response<Object>(500, "Wystąpił problem techniczny! \n " + e.toString());

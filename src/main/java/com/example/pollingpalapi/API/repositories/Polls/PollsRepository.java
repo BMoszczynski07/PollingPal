@@ -62,17 +62,28 @@ public class PollsRepository {
         return selectedPolls;
     }
 
-    public void addUserVote(int pollId, int optionId, int userId) {
-        String sql = "INSERT INTO poll_votes (user_id, option_id, poll_id) VALUES " +
-                "(?, ?, ?)";
+    public String addUserVote(int optionId, int userId) {
+        List<Integer> getPollId = getPollId(optionId);
+        Integer pollId = getPollId.get(0);
 
-        jdbc.update(sql, new Object[]{userId, optionId, pollId});
-    }
+        String sql1 = "SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?";
 
-    public void removeUserVote(int pollId, int userId) {
-        String sql = "DELETE FROM poll_votes WHERE poll_id = ? AND user_id = ?";
+        List<Vote> vote = jdbc.query(sql1, new VoteMapper(), new Object[]{pollId, userId});
 
-        jdbc.update(sql, new Object[]{pollId, userId});
+        if (vote.isEmpty()) {
+            String sql2 = "INSERT INTO poll_votes (user_id, option_id, poll_id) " +
+                    "VALUES (?, ?, ?)";
+
+            jdbc.update(sql2, new Object[]{userId, optionId, pollId});
+
+            return "Dodano głos";
+        }
+
+        String sql3 = "DELETE FROM poll_votes WHERE poll_id = ? AND user_id = ?";
+
+        jdbc.update(sql3, new Object[]{pollId, userId});
+
+        return "Usunięto głos";
     }
 
     public List<Integer> getPollId (int optionId) {
