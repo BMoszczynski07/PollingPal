@@ -81,6 +81,19 @@ public class Polls {
         }
     }
 
+    @GetMapping("/did-user-vote/{pollId}/{userId}")
+    public Response<Object> didUserVote(@PathVariable int pollId, @PathVariable int userId) {
+        try {
+            List<Vote> vote = polls.getVotesForPoll(pollId, userId);
+
+            if (!vote.isEmpty()) return new Response<Object>(200, true);
+            return new Response<Object>(200, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<Object>(500, "Wystapił problem techniczny! \n" + e.toString());
+        }
+    }
+
     @GetMapping("/get-votes-for-user/{pollId}/{userId}")
     public Response<Object> getVotesForUser(@PathVariable int pollId, @PathVariable Integer userId) {
         try {

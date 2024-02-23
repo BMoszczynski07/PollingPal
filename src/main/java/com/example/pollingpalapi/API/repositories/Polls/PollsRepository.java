@@ -86,6 +86,12 @@ public class PollsRepository {
         return "Usunięto głos";
     }
 
+    public List<Vote> getVotesForPoll(int pollId, int userId) {
+        String sql = "SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?";
+
+        return jdbc.query(sql, new VoteMapper(), new Object[]{pollId, userId});
+    }
+
     public List<Integer> getPollId (int optionId) {
         String sql = "SELECT poll_id FROM poll_options WHERE id = ?";
 
