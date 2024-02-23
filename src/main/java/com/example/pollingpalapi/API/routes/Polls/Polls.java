@@ -1,12 +1,7 @@
 package com.example.pollingpalapi.API.routes.Polls;
 
-import com.example.pollingpalapi.API.Models.Polls.Like;
-import com.example.pollingpalapi.API.Models.Polls.Option;
-import com.example.pollingpalapi.API.Models.Polls.Poll;
+import com.example.pollingpalapi.API.Models.Polls.*;
 import com.example.pollingpalapi.API.Models.Response.Response;
-import com.example.pollingpalapi.API.Models.Polls.SearchDTO;
-import com.example.pollingpalapi.API.Models.Polls.Vote;
-import com.example.pollingpalapi.API.Models.Polls.VoteForOption;
 import com.example.pollingpalapi.API.repositories.Polls.PollsRepository;
 import com.mysql.cj.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +54,23 @@ public class Polls {
             return new Response<Object>(200, selectedPolls);
         } catch (Exception e) {
             return new Response<Object>(500, "Wystąpił problem techniczny! \n " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/add-vote")
+    public Response<Object> addVote(@RequestBody OptionDTO option) {
+        try {
+            List<Integer> getPollId = polls.getPollId(option.getOptionId());
+            Integer pollId = getPollId.get(0);
+
+            polls.removeUserVote(pollId, option.getUserId());
+
+            polls.addUserVote(pollId, option.getOptionId(), option.getUserId());
+
+            return new Response<Object>(200, "Dodano głos");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<Object>(500, "Wystąpił problem techniczny! \n " + e.toString());
         }
     }
 

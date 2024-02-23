@@ -62,6 +62,25 @@ public class PollsRepository {
         return selectedPolls;
     }
 
+    public void addUserVote(int pollId, int optionId, int userId) {
+        String sql = "INSERT INTO poll_votes (user_id, option_id, poll_id) VALUES " +
+                "(?, ?, ?)";
+
+        jdbc.update(sql, new Object[]{userId, optionId, pollId});
+    }
+
+    public void removeUserVote(int pollId, int userId) {
+        String sql = "DELETE FROM poll_votes WHERE poll_id = ? AND user_id = ?";
+
+        jdbc.update(sql, new Object[]{pollId, userId});
+    }
+
+    public List<Integer> getPollId (int optionId) {
+        String sql = "SELECT poll_id FROM poll_options WHERE id = ?";
+
+        return jdbc.queryForList(sql, Integer.class, new Object[]{optionId});
+    }
+
     public List<Boolean> isSelectedByUser(Integer userId, int optionId) {
         String sql = "SELECT (CASE WHEN user_id = ? THEN true ELSE false END) as selected FROM poll_votes " +
                 "WHERE option_id = ?";
