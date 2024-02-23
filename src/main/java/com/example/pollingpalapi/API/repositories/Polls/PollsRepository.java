@@ -62,6 +62,15 @@ public class PollsRepository {
         return selectedPolls;
     }
 
+    public List<Boolean> isSelectedByUser(Integer userId, int optionId) {
+        String sql = "SELECT (CASE WHEN user_id = ? THEN true ELSE false END) as selected FROM poll_votes " +
+                "WHERE option_id = ?";
+
+        System.out.println();
+
+        return jdbc.query(sql, (rs, rowNum) -> rs.getBoolean("selected"), userId, optionId);
+    }
+
     public List<Vote> getOptionVotes(int optionId) {
         String sql = "SELECT * FROM poll_votes WHERE option_id = ?";
 
@@ -84,11 +93,11 @@ public class PollsRepository {
                 "INNER JOIN users u ON p.user_id = u.id " +
                 "LEFT JOIN poll_hearts ph ON p.id = ph.poll_id " +
                 "LEFT JOIN poll_comments pc ON p.id = pc.poll_id " +
-                "WHERE p.poll_question LIKE ? OR u.username LIKE ? " +
+                "WHERE p.poll_question LIKE ? " +
                 "GROUP BY p.id " +
                 "ORDER BY hearts DESC LIMIT 25";
 
-        List<Poll> selectedPolls = jdbc.query(sql, new Object[]{searchParam, searchParam}, new PollsMapper());
+        List<Poll> selectedPolls = jdbc.query(sql, new Object[]{searchParam}, new PollsMapper());
 
         return selectedPolls;
     }

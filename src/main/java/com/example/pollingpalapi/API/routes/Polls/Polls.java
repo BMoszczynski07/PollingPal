@@ -8,11 +8,13 @@ import com.example.pollingpalapi.API.Models.Polls.SearchDTO;
 import com.example.pollingpalapi.API.Models.Polls.Vote;
 import com.example.pollingpalapi.API.Models.Polls.VoteForOption;
 import com.example.pollingpalapi.API.repositories.Polls.PollsRepository;
+import com.mysql.cj.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class Polls {
@@ -72,8 +74,8 @@ public class Polls {
         }
     }
 
-    @GetMapping("/get-option-votes/{pollId}")
-    public Response<Object> getOptionVotes(@PathVariable int pollId) {
+    @GetMapping("/get-votes-for-user/{pollId}/{userId}")
+    public Response<Object> getVotesForUser(@PathVariable int pollId, @PathVariable Integer userId) {
         try {
             List<Option> pollOptions = polls.getPollOptions(pollId);
 
@@ -82,7 +84,29 @@ public class Polls {
             for (Option option : pollOptions) {
                 List<Vote> votesForOption = polls.getOptionVotes(option.getId());
 
-                votes.add(new VoteForOption(option.getPoll_option(), votesForOption.size()));
+                List<Boolean> isSelectedByUser = polls.isSelectedByUser(userId, option.getId());
+
+                votes.add(new VoteForOption(option.getPoll_option(), votesForOption.size(), !isSelectedByUser.isEmpty()));
+            }
+
+            return new Response<Object>(200, votes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<Object>(500, "Wystapił problem techniczny \n " + e.toString());
+        }
+    }
+
+    @GetMapping("/get-votes/{pollId}")
+    public Response<Object> getVotes(@PathVariable int pollId) {
+        try {
+            List<Option> pollOptions = polls.getPollOptions(pollId);
+
+            ArrayList<VoteForOption> votes = new ArrayList<VoteForOption>();
+
+            for (Option option : pollOptions) {
+                List<Vote> votesForOption = polls.getOptionVotes(option.getId());
+
+                votes.add(new VoteForOption(option.getPoll_option(), votesForOption.size(), false));
             }
 
             return new Response<Object>(200, votes);
