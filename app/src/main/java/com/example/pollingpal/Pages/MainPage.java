@@ -196,15 +196,19 @@ public class MainPage extends MainActivity {
             optionBar.getLayoutParams().width = optionBarWidth;
 
             optionsContainer.addView(optionSelectedView);
-        }
 
+            ImageView optionSelectedCheck = optionSelectedView.findViewById(R.id.poll_option_selected_check);
+
+            if (!vote.selected) optionSelectedCheck.setVisibility(View.GONE);
+        }
     }
 
     public void getVotes(LinearLayout optionsContainer, int pollId) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-            String requestURL = API + "/get-votes/" + pollId;
+            String requestURL = user != null ? API + "/get-votes-for-user/" + pollId + "/" + user.id :
+                    API + "/get-votes/" + pollId;
 
             JsonObjectRequest voteReq = new JsonObjectRequest(Request.Method.GET, requestURL, null,
                     new Response.Listener<JSONObject>() {
@@ -320,7 +324,7 @@ public class MainPage extends MainActivity {
 
     public void fetchOptions(LinearLayout optionsContainer, int pollId) {
 //        TODO: Fetch all options from the database using polls.id and return array of options
-        ArrayList<Option> options = new ArrayList<>();
+        optionsContainer.removeAllViews();
 
         String requestURL = API + "/get-poll-options/" + pollId;
 
@@ -338,6 +342,7 @@ public class MainPage extends MainActivity {
 
                                 if (httpCode == 200) {
                                     JSONArray allOptions = response.getJSONArray("res");
+                                    ArrayList<Option> options = new ArrayList<>();
 
                                     for (int i = 0; i < allOptions.length(); i++) {
                                         JSONObject option = allOptions.getJSONObject(i);

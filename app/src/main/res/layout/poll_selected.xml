@@ -24,6 +24,7 @@
             <ImageView
                 android:layout_width="7pt"
                 android:layout_height="7pt"
+                android:id="@+id/poll_option_selected_check"
                 android:src="@drawable/check_solid"
                 android:visibility="visible"
                 />
