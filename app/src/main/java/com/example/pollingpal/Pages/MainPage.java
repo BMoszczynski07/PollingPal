@@ -33,6 +33,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainPage extends MainActivity {
+    public boolean didUserVote = false;
     int minusDays = 14;
     ArrayList<Poll> pollsList = new ArrayList<>();
     private Context context;
@@ -435,9 +436,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public boolean didUserVote(int pollId, int userId) {
-        final boolean[] voted = {true};
-
+    public void didUserVote(int pollId, int userId, LinearLayout options, Poll poll) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -451,7 +450,13 @@ public class MainPage extends MainActivity {
                                 int httpCode = response.getInt("http");
 
                                 if (httpCode == 200) {
-                                    voted[0] = response.getBoolean("res");
+                                    didUserVote = response.getBoolean("res");
+
+                                    if (!didUserVote) {
+                                        fetchOptions(options, poll.id);
+                                    } else {
+                                        getVotes(options, poll.id);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -471,14 +476,10 @@ public class MainPage extends MainActivity {
 
             requestQueue.add(didUserVoteReq);
 
-            return voted[0];
-
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("error", e.toString());
         }
-
-        return false;
     }
 
     public void appendPollsToLayout() {
@@ -521,13 +522,7 @@ public class MainPage extends MainActivity {
             if (user == null) {
                 fetchOptions(options, poll.id);
             } else {
-                boolean didUserVote = didUserVote(poll.id, user.id);
-
-                if (!didUserVote) {
-                    fetchOptions(options, poll.id);
-                } else {
-                    getVotes(options, poll.id);
-                }
+                didUserVote(poll.id, user.id, options, poll);
             }
 
 //            for (Option option : pollOptions) {
