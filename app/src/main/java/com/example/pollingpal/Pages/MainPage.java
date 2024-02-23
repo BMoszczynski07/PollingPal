@@ -435,6 +435,52 @@ public class MainPage extends MainActivity {
         }
     }
 
+    public boolean didUserVote(int pollId, int userId) {
+        final boolean[] voted = {true};
+
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            String requestURL = API + "/did-user-vote/" + pollId + "/" + userId;
+
+            JsonObjectRequest didUserVoteReq = new JsonObjectRequest(Request.Method.GET, requestURL, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                int httpCode = response.getInt("http");
+
+                                if (httpCode == 200) {
+                                    voted[0] = response.getBoolean("res");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d("JSONException", e.toString());
+                            }
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.d("API error", error.toString());
+                        }
+                    }
+            );
+
+            requestQueue.add(didUserVoteReq);
+
+            return voted[0];
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("error", e.toString());
+        }
+
+        return false;
+    }
+
     public void appendPollsToLayout() {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout sitePollsContainer = ((Activity) context).findViewById(R.id.site_polls_container);
@@ -471,11 +517,18 @@ public class MainPage extends MainActivity {
 //            TODO: return the arraylist of options for polls and loop through them
             LinearLayout options = pollLayout.findViewById(R.id.poll_options);
 
-            // if (user nie zaznaczył opcji w ankiecie) {
-//              fetchOptions(options, poll.id);
-            // } else if (user zaznaczył opcję w ankiecie) {
-                getVotes(options, poll.id);
-            // }
+
+            if (user == null) {
+                fetchOptions(options, poll.id);
+            } else {
+                boolean didUserVote = didUserVote(poll.id, user.id);
+
+                if (!didUserVote) {
+                    fetchOptions(options, poll.id);
+                } else {
+                    getVotes(options, poll.id);
+                }
+            }
 
 //            for (Option option : pollOptions) {
 //                View pollOptionLayout = inflater.inflate(R.layout.poll_select, sitePollsContainer, false);
