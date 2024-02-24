@@ -16,6 +16,5 @@
             android:padding="8dp"
             android:background="@drawable/rounded_corners_dark_gray"
             android:layout_margin="8dp"
-            android:onClick="selectOption(0, 0)"
             />
 </LinearLayout>

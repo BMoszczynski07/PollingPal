@@ -164,7 +164,7 @@ public class MainPage extends MainActivity {
         Log.d("click", "click");
     }
 
-    public void appendVotes(LinearLayout optionsContainer, ArrayList<VoteForOption> votes) {
+    public void appendVotes(LinearLayout optionsContainer, ArrayList<VoteForOption> votes, int pollId) {
         optionsContainer.removeAllViews();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -184,6 +184,13 @@ public class MainPage extends MainActivity {
 
         for (VoteForOption vote : votes) {
             View optionSelectedView = inflater.inflate(R.layout.poll_selected, optionsContainer, false);
+
+            optionSelectedView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    voteForOption(vote.optionId, optionsContainer, pollId);
+                }
+            });
 
             double optionPercentage = Math.floor(((float) vote.votesQty / votesQty) * 100);
 
@@ -211,6 +218,8 @@ public class MainPage extends MainActivity {
             String requestURL = user != null ? API + "/get-votes-for-user/" + pollId + "/" + user.id :
                     API + "/get-votes/" + pollId;
 
+            Log.d("requestURL", requestURL);
+
             JsonObjectRequest voteReq = new JsonObjectRequest(Request.Method.GET, requestURL, null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -222,13 +231,15 @@ public class MainPage extends MainActivity {
                                     JSONArray res = response.getJSONArray("res");
                                     ArrayList<VoteForOption> votes = new ArrayList<>();
 
+                                    Log.d("votesRes", res.toString());
+
                                     for (int i = 0; i < res.length(); i++) {
                                         VoteForOption vote = new VoteForOption(res.getJSONObject(i));
 
                                         votes.add(vote);
                                     }
 
-                                    appendVotes(optionsContainer, votes);
+                                    appendVotes(optionsContainer, votes, pollId);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -253,16 +264,18 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void voteForOption (Option option, LinearLayout optionsContainer) {
+    public void voteForOption (int optionId, LinearLayout optionsContainer, int pollId) {
+        if (user == null) return;
+
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
             JSONObject optionObject = new JSONObject();
 
-            String requestURL = API + "/vote-for-option";
+            String requestURL = API + "/add-vote";
 
             try {
-                optionObject.put("optionId", option.id);
+                optionObject.put("optionId", optionId);
                 optionObject.put("userId", user.id);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -275,9 +288,16 @@ public class MainPage extends MainActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 int httpCode = response.getInt("http");
+                                String res = response.getString("res");
+
+                                Log.d("res", res);
 
                                 if (httpCode == 200) {
-
+                                    if (res.equals("Dodano głos")) {
+                                        getVotes(optionsContainer, pollId);
+                                    } else if (res.equals("Usunięto głos")) {
+                                        fetchOptions(optionsContainer, pollId);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -302,7 +322,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void appendOptions(LinearLayout optionsContainer, ArrayList<Option> optionsArray) {
+    public void appendOptions(LinearLayout optionsContainer, ArrayList<Option> optionsArray, int pollId) {
         Log.d("options", optionsArray.toString());
 
         for (Option option : optionsArray) {
@@ -315,7 +335,7 @@ public class MainPage extends MainActivity {
             optionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    voteForOption(option, optionsContainer);
+                    voteForOption(option.id, optionsContainer, pollId);
                 }
             });
 
@@ -354,7 +374,7 @@ public class MainPage extends MainActivity {
 
                                     Log.d("appending options", "appending options");
 
-                                    appendOptions(optionsContainer, options);
+                                    appendOptions(optionsContainer, options, pollId);
                                 } else {
                                     Log.d("DB Error", response.toString());
                                 }
@@ -436,7 +456,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void didUserVote(int pollId, int userId, LinearLayout options, Poll poll) {
+    public void didUserVote(int userId, LinearLayout options, int pollId) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -453,9 +473,9 @@ public class MainPage extends MainActivity {
                                     didUserVote = response.getBoolean("res");
 
                                     if (!didUserVote) {
-                                        fetchOptions(options, poll.id);
+                                        fetchOptions(options, pollId);
                                     } else {
-                                        getVotes(options, poll.id);
+                                        getVotes(options, pollId);
                                     }
                                 }
                             } catch (JSONException e) {
@@ -499,7 +519,6 @@ public class MainPage extends MainActivity {
             TextView pollComments = pollLayout.findViewById(R.id.poll_comments);
 
             LinearLayout pollHeartsContainer = pollLayout.findViewById(R.id.poll_hearts_container);
-            LinearLayout pollCommentsContainer = pollLayout.findViewById(R.id.poll_comments_container);
 
             Picasso.get().load(poll.profile_pic).into(pollPic);
             pollUser.setText(poll.user);
@@ -515,23 +534,13 @@ public class MainPage extends MainActivity {
                 }
             });
 
-//            TODO: return the arraylist of options for polls and loop through them
             LinearLayout options = pollLayout.findViewById(R.id.poll_options);
-
 
             if (user == null) {
                 fetchOptions(options, poll.id);
             } else {
-                didUserVote(poll.id, user.id, options, poll);
+                didUserVote(user.id, options, poll.id);
             }
-
-//            for (Option option : pollOptions) {
-//                View pollOptionLayout = inflater.inflate(R.layout.poll_select, sitePollsContainer, false);
-//
-//                TextView pollOption = pollOption.findViewById(R.id.poll_option);
-//
-//                pollOption.setText(option.poll_option);
-//            }
 
             sitePollsContainer.addView(pollLayout);
         }
