@@ -48,7 +48,7 @@ public class PollsRepository {
 
         String sql = "SELECT p.*, u.username AS user, u.profile_pic AS profile_pic, COUNT(DISTINCT ph.id) " +
                 "AS hearts, COUNT(DISTINCT pc.id) AS comments FROM polls p " +
-                "INNER JOIN users u ON p.user_id = u.id " +
+                "LEFT JOIN users u ON p.user_id = u.id " +
                 "LEFT JOIN poll_hearts ph ON p.id = ph.poll_id " +
                 "LEFT JOIN poll_comments pc ON p.id = pc.poll_id " +
                 "WHERE p.poll_date <= ? AND p.poll_date >= ? " +
@@ -134,7 +134,7 @@ public class PollsRepository {
 
         String sql = "SELECT p.*, u.username AS user, u.profile_pic AS profile_pic, COUNT(DISTINCT ph.id) " +
                 "AS hearts, COUNT(DISTINCT pc.id) AS comments FROM polls p " +
-                "INNER JOIN users u ON p.user_id = u.id " +
+                "LEFT JOIN users u ON p.user_id = u.id " +
                 "LEFT JOIN poll_hearts ph ON p.id = ph.poll_id " +
                 "LEFT JOIN poll_comments pc ON p.id = pc.poll_id " +
                 "WHERE p.poll_question LIKE ? " +

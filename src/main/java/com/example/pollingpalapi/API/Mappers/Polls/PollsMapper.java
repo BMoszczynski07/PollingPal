@@ -19,6 +19,7 @@ public class PollsMapper implements RowMapper<Poll> {
         poll.setPoll_question(resultSet.getString("poll_question"));
         poll.setPoll_hearts(resultSet.getInt("hearts"));
         poll.setPoll_comments(resultSet.getInt("comments"));
+        poll.setNickname(resultSet.getString("nickname"));
 
         return poll;
     }
