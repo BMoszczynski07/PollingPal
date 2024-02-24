@@ -520,8 +520,18 @@ public class MainPage extends MainActivity {
 
             LinearLayout pollHeartsContainer = pollLayout.findViewById(R.id.poll_hearts_container);
 
-            Picasso.get().load(poll.profile_pic).into(pollPic);
-            pollUser.setText(poll.user);
+            if (poll.profile_pic == null) {
+                String guestProfilePATH = API + "/images/guest.png";
+
+                Picasso.get().load(guestProfilePATH).into(pollPic);
+            } else {
+                Picasso.get().load(poll.profile_pic).into(pollPic);
+            }
+            if (poll.user == null) {
+                pollUser.setText(poll.nickname);
+            } else {
+                pollUser.setText(poll.user);
+            }
             pollDate.setText(poll.poll_date);
             pollQuestion.setText(poll.poll_question);
             pollHearts.setText(String.valueOf(poll.poll_hearts));
@@ -570,6 +580,8 @@ public class MainPage extends MainActivity {
                                     for (int i = 0; i < res.length(); i++) {
                                         JSONObject resPoll = res.getJSONObject(i);
                                         Poll pollElem = new Poll(resPoll);
+
+                                        Log.d("resPoll", resPoll.toString());
 
                                         pollsList.add(pollElem);
                                     }
