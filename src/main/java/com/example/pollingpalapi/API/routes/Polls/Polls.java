@@ -106,7 +106,7 @@ public class Polls {
 
                 List<Boolean> isSelectedByUser = polls.isSelectedByUser(userId, option.getId());
 
-                votes.add(new VoteForOption(option.getPoll_option(), votesForOption.size(), !isSelectedByUser.isEmpty()));
+                votes.add(new VoteForOption(option.getId(), option.getPoll_option(), votesForOption.size(), !isSelectedByUser.isEmpty()));
             }
 
             return new Response<Object>(200, votes);
@@ -126,7 +126,7 @@ public class Polls {
             for (Option option : pollOptions) {
                 List<Vote> votesForOption = polls.getOptionVotes(option.getId());
 
-                votes.add(new VoteForOption(option.getPoll_option(), votesForOption.size(), false));
+                votes.add(new VoteForOption(option.getId(), option.getPoll_option(), votesForOption.size(), false));
             }
 
             return new Response<Object>(200, votes);

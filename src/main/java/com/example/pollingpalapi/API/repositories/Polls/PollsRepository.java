@@ -67,7 +67,6 @@ public class PollsRepository {
         Integer pollId = getPollId.get(0);
 
         String sql1 = "SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?";
-
         List<Vote> vote = jdbc.query(sql1, new VoteMapper(), new Object[]{pollId, userId});
 
         if (vote.isEmpty()) {
@@ -79,8 +78,19 @@ public class PollsRepository {
             return "Dodano głos";
         }
 
-        String sql3 = "DELETE FROM poll_votes WHERE poll_id = ? AND user_id = ?";
+        if (vote.get(0).getOption_id() != optionId) {
+            String sql5 = "DELETE FROM poll_votes WHERE poll_id = ? AND user_id = ?";
+            jdbc.update(sql5, new Object[]{pollId, userId});
 
+            String sql4 = "INSERT INTO poll_votes (user_id, option_id, poll_id) " +
+                    "VALUES (?, ?, ?)";
+
+            jdbc.update(sql4, new Object[]{userId, optionId, pollId});
+
+            return "Dodano głos";
+        }
+
+        String sql3 = "DELETE FROM poll_votes WHERE poll_id = ? AND user_id = ?";
         jdbc.update(sql3, new Object[]{pollId, userId});
 
         return "Usunięto głos";
@@ -100,11 +110,9 @@ public class PollsRepository {
 
     public List<Boolean> isSelectedByUser(Integer userId, int optionId) {
         String sql = "SELECT (CASE WHEN user_id = ? THEN true ELSE false END) as selected FROM poll_votes " +
-                "WHERE option_id = ?";
+                "WHERE option_id = ? AND user_id = ?";
 
-        System.out.println();
-
-        return jdbc.query(sql, (rs, rowNum) -> rs.getBoolean("selected"), userId, optionId);
+        return jdbc.query(sql, (rs, rowNum) -> rs.getBoolean("selected"), userId, optionId, userId);
     }
 
     public List<Vote> getOptionVotes(int optionId) {
