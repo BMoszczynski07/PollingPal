@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/site_add_poll_page"
+    android:layout_marginTop="18dp"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12pt"
+        android:gravity="center"
+        android:text="Dodaj ankietę" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Wpisz swój pseudonim"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/site_edit_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pytanie (np. Jaki jest twój ulubiony kolor?)" />
+
+            <LinearLayout
+                android:id="@+id/site_edit_options_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <Button
+                android:id="@+id/site_add_option"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:backgroundTint="@color/black"
+                android:text="+ Dodaj opcję" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="18dp"
+        >
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Wyślij ankietę"
+            android:backgroundTint="@color/black"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Powrót"
+            android:textSize="8pt"
+            android:layout_marginLeft="8dp"
+            />
+    </LinearLayout>
+</LinearLayout>

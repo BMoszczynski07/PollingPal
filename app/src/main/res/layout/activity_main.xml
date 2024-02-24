@@ -34,9 +34,11 @@
     <include
         layout="@layout/login" />
 
-    <include layout="@layout/comments_section" />
+<!--    <include layout="@layout/comments_section" />-->
 
     <include layout="@layout/main_page" />
+
+    <include layout="@layout/add_poll" />
 
 
 </LinearLayout>

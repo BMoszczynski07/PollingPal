@@ -38,7 +38,6 @@
                 android:layout_width="165dp"
                 android:layout_height="45dp"
                 android:layout_marginRight="10dp"
-                android:onClick="searchPolls"
                 android:backgroundTint="@color/black"
                 android:id="@+id/search_polls_btn"
                 android:text="Wyszukaj ankietę" />
@@ -46,8 +45,8 @@
             <Button
                 android:layout_width="160dp"
                 android:layout_height="45dp"
-                android:onClick="switchToAddPollPage"
                 android:backgroundTint="@color/black"
+                android:id="@+id/add_poll_btn"
                 android:text="+ Dodaj ankietę" />
 
         </LinearLayout>

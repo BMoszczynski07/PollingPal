@@ -38,6 +38,7 @@ public class MainPage extends MainActivity {
     ArrayList<Poll> pollsList = new ArrayList<>();
     private Context context;
     public LoginPage loginPage;
+    public AddPollPage addPollPage;
     ArrayList<Integer> likedPollsIds = new ArrayList<>();
     public User user;
 
@@ -51,14 +52,17 @@ public class MainPage extends MainActivity {
 
         View mainPageView = ((Activity) context).findViewById(R.id.site_main_page);
         View loginPageView = ((Activity) context).findViewById(R.id.site_login_page);
+        View addPollPageView = ((Activity) context).findViewById(R.id.site_login_page);
 
         loginPageView.setVisibility(View.GONE);
+        addPollPageView.setVisibility(View.GONE);
         mainPageView.setVisibility(View.VISIBLE);
 
         Log.d("redirecting", "redirecting to main page...");
 
         Button searchBtn = ((Activity) context).findViewById(R.id.search_polls_btn);
         Button loginBtn = ((Activity) context).findViewById(R.id.site_login);
+        Button addPollBtn = ((Activity) context).findViewById(R.id.add_poll_btn);
 
         fetchPolls();
 
@@ -66,6 +70,13 @@ public class MainPage extends MainActivity {
             @Override
             public void onClick(View view) {
                 loginPage = new LoginPage(context);
+            }
+        });
+
+        addPollBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPollPage = new AddPollPage(context, user);
             }
         });
 

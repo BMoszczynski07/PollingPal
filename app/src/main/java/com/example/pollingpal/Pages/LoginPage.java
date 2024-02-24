@@ -31,9 +31,11 @@ public class LoginPage extends MainActivity {
 
         View mainPageView = ((Activity) context).findViewById(R.id.site_main_page);
         View loginPage = ((Activity) context).findViewById(R.id.site_login_page);
+        View addPollPage = ((Activity) context).findViewById(R.id.site_add_poll_page);
 
         loginPage.setVisibility(View.VISIBLE);
         mainPageView.setVisibility(View.GONE);
+        addPollPage.setVisibility(View.GONE);
 
         TextView returnToMainPage = ((Activity) context).findViewById(R.id.site_return_to_main_page);
 
