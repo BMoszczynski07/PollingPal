@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class Option {
     private int id;
-    private int poll_id;
+    private String poll_id;
     private String poll_option;
 }

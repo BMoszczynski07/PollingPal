@@ -12,7 +12,7 @@ public class OptionMapper implements RowMapper<Option> {
         Option option = new Option();
 
         option.setId(resultSet.getInt("id"));
-        option.setPoll_id(resultSet.getInt("poll_id"));
+        option.setPoll_id(resultSet.getString("poll_id"));
         option.setPoll_option(resultSet.getString("poll_option"));
 
         return option;

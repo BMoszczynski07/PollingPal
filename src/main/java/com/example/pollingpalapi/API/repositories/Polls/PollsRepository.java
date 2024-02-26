@@ -4,13 +4,11 @@ import com.example.pollingpalapi.API.Mappers.Polls.LikeMapper;
 import com.example.pollingpalapi.API.Mappers.Polls.OptionMapper;
 import com.example.pollingpalapi.API.Mappers.Polls.PollsMapper;
 import com.example.pollingpalapi.API.Mappers.Polls.VoteMapper;
-import com.example.pollingpalapi.API.Models.Polls.Like;
-import com.example.pollingpalapi.API.Models.Polls.Option;
-import com.example.pollingpalapi.API.Models.Polls.Poll;
-import com.example.pollingpalapi.API.Models.Polls.Vote;
+import com.example.pollingpalapi.API.Models.Polls.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -63,8 +61,8 @@ public class PollsRepository {
     }
 
     public String addUserVote(int optionId, int userId) {
-        List<Integer> getPollId = getPollId(optionId);
-        Integer pollId = getPollId.get(0);
+        List<String> getPollId = getPollId(optionId);
+        String pollId = getPollId.get(0);
 
         String sql1 = "SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?";
         List<Vote> vote = jdbc.query(sql1, new VoteMapper(), new Object[]{pollId, userId});
@@ -96,16 +94,16 @@ public class PollsRepository {
         return "Usunięto głos";
     }
 
-    public List<Vote> getVotesForPoll(int pollId, int userId) {
+    public List<Vote> getVotesForPoll(String pollId, int userId) {
         String sql = "SELECT * FROM poll_votes WHERE poll_id = ? AND user_id = ?";
 
         return jdbc.query(sql, new VoteMapper(), new Object[]{pollId, userId});
     }
 
-    public List<Integer> getPollId (int optionId) {
+    public List<String> getPollId (int optionId) {
         String sql = "SELECT poll_id FROM poll_options WHERE id = ?";
 
-        return jdbc.queryForList(sql, Integer.class, new Object[]{optionId});
+        return jdbc.queryForList(sql, String.class, new Object[]{optionId});
     }
 
     public List<Boolean> isSelectedByUser(Integer userId, int optionId) {
@@ -121,7 +119,7 @@ public class PollsRepository {
         return jdbc.query(sql, new VoteMapper(), new Object[]{optionId});
     }
 
-    public List<Option> getPollOptions(int pollId) {
+    public List<Option> getPollOptions(String pollId) {
         String sql = "SELECT * FROM poll_options WHERE poll_id = ?";
 
         List<Option> selectedOptions = jdbc.query(sql, new Object[]{pollId}, new OptionMapper());
@@ -144,5 +142,23 @@ public class PollsRepository {
         List<Poll> selectedPolls = jdbc.query(sql, new Object[]{searchParam}, new PollsMapper());
 
         return selectedPolls;
+    }
+
+    public void addPoll(AddPollDTO newPoll) {
+        Date currentDate = new Date();
+
+        UUID uuid = UUID.randomUUID();
+        String randomId = uuid.toString();
+
+        String insertPollSQL = "INSERT INTO polls (id, user_id, poll_question, poll_date, nickname) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        jdbc.update(insertPollSQL, new Object[]{randomId, newPoll.getUserId(), newPoll.getPoll_question(), currentDate, newPoll.getNickname()});
+
+        for (String option : newPoll.getOptions()) {
+            String insertOptionSQL = "INSERT INTO poll_options (poll_id, poll_option) VALUES (?, ?)";
+
+            jdbc.update(insertOptionSQL, new Object[]{randomId, option});
+        }
     }
 }

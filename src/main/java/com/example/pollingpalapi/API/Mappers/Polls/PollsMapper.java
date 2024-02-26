@@ -11,7 +11,7 @@ public class PollsMapper implements RowMapper<Poll> {
     public Poll mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Poll poll = new Poll();
 
-        poll.setId(resultSet.getInt("Id"));
+        poll.setId(resultSet.getString("Id"));
         poll.setUser_id(resultSet.getInt("user_id"));
         poll.setUser(resultSet.getString("user"));
         poll.setProfile_pic(resultSet.getString("profile_pic"));

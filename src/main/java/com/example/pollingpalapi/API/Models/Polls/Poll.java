@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Poll {
-    private int id;
+    private String id;
     private int user_id;
     private String user;
     private String poll_date;

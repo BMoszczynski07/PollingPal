@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class Like {
     public int userId;
-    public int pollId;
+    public String pollId;
 }

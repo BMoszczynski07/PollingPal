@@ -20,6 +20,18 @@ public class Polls {
         this.polls = polls;
     }
 
+    @PostMapping("/add-poll")
+    public Response<Object> addPoll(@RequestBody AddPollDTO newPoll) {
+        try {
+            polls.addPoll(newPoll);
+
+            return new Response<Object>(200, "Wysłano ankietę");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<Object>(500, "Wystąpił problem techniczny! " + e.toString());
+        }
+    }
+
     @PostMapping("/like-poll")
     public Response likePoll(@RequestBody Like like) {
         try {
@@ -82,7 +94,7 @@ public class Polls {
     }
 
     @GetMapping("/did-user-vote/{pollId}/{userId}")
-    public Response<Object> didUserVote(@PathVariable int pollId, @PathVariable int userId) {
+    public Response<Object> didUserVote(@PathVariable String pollId, @PathVariable int userId) {
         try {
             List<Vote> vote = polls.getVotesForPoll(pollId, userId);
 
@@ -95,7 +107,7 @@ public class Polls {
     }
 
     @GetMapping("/get-votes-for-user/{pollId}/{userId}")
-    public Response<Object> getVotesForUser(@PathVariable int pollId, @PathVariable Integer userId) {
+    public Response<Object> getVotesForUser(@PathVariable String pollId, @PathVariable Integer userId) {
         try {
             List<Option> pollOptions = polls.getPollOptions(pollId);
 
@@ -117,7 +129,7 @@ public class Polls {
     }
 
     @GetMapping("/get-votes/{pollId}")
-    public Response<Object> getVotes(@PathVariable int pollId) {
+    public Response<Object> getVotes(@PathVariable String pollId) {
         try {
             List<Option> pollOptions = polls.getPollOptions(pollId);
 
@@ -137,7 +149,7 @@ public class Polls {
     }
 
     @GetMapping("/get-poll-options/{pollId}")
-    public Response<Object> getPollOptions(@PathVariable int pollId) {
+    public Response<Object> getPollOptions(@PathVariable String pollId) {
         try {
             List<Option> selectedOptions = polls.getPollOptions(pollId);
 

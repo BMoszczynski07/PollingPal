@@ -13,7 +13,7 @@ public class LikeMapper implements RowMapper<Like> {
         Like like = new Like();
 
         like.setUserId(resultSet.getInt("user_id"));
-        like.setPollId(resultSet.getInt("poll_id"));
+        like.setPollId(resultSet.getString("poll_id"));
 
         return like;
     }

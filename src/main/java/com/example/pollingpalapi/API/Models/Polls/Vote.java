@@ -9,5 +9,5 @@ public class Vote {
     public int id;
     public int user_id;
     public int option_id;
-    public int poll_id;
+    public String poll_id;
 }

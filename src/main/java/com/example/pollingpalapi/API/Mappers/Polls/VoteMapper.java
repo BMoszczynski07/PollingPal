@@ -14,7 +14,7 @@ public class VoteMapper implements RowMapper<Vote> {
         vote.setId(resultSet.getInt("id"));
         vote.setUser_id(resultSet.getInt("user_id"));
         vote.setOption_id(resultSet.getInt("option_id"));
-        vote.setPoll_id(resultSet.getInt("poll_id"));
+        vote.setPoll_id(resultSet.getString("poll_id"));
 
         return vote;
     }
