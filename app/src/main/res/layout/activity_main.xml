@@ -40,5 +40,7 @@
 
     <include layout="@layout/add_poll" />
 
+    <include layout="@layout/user_information" />
+
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 
 public class LoginPage extends MainActivity {
     private Context context;
+    public UserInformation userInfo;
 
     public LoginPage(Context context) {
         this.context = context;
@@ -110,13 +112,17 @@ public class LoginPage extends MainActivity {
                                         mainPage = new MainPage(context, user);
 
                                         View loginBtns = ((Activity) context).findViewById(R.id.site_login_btns);
-                                        View userLogged = ((Activity) context).findViewById(R.id.site_user_logged);
+
+                                        Button addPollBtn = ((Activity) context).findViewById(R.id.add_poll_btn);
+
+                                        View siteUserLogged = ((Activity) context).findViewById(R.id.site_user_logged);
 
                                         if (user != null) {
-                                            loginBtns.setVisibility(View.GONE);
-                                            userLogged.setVisibility(View.VISIBLE);
+                                            addPollBtn.setVisibility(View.VISIBLE);
 
-                                            View siteUserLogged = ((Activity) context).findViewById(R.id.site_user_logged);
+
+                                            loginBtns.setVisibility(View.GONE);
+                                            siteUserLogged.setVisibility(View.VISIBLE);
 
                                             ImageView siteUserPic = ((Activity) context).findViewById(R.id.site_user_pic);
                                             TextView siteUsername = ((Activity) context).findViewById(R.id.site_username);
@@ -127,12 +133,12 @@ public class LoginPage extends MainActivity {
                                             siteUserLogged.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-
+                                                    userInfo = new UserInformation(context, user);
                                                 }
                                             });
                                         } else {
                                             loginBtns.setVisibility(View.VISIBLE);
-                                            userLogged.setVisibility(View.GONE);
+                                            siteUserLogged.setVisibility(View.GONE);
                                         }
                                         break;
                                     case 404:

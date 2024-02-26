@@ -52,17 +52,18 @@ public class MainPage extends MainActivity {
 
         View mainPageView = ((Activity) context).findViewById(R.id.site_main_page);
         View loginPageView = ((Activity) context).findViewById(R.id.site_login_page);
-        View addPollPageView = ((Activity) context).findViewById(R.id.site_login_page);
+        View addPollPageView = ((Activity) context).findViewById(R.id.site_add_poll_page);
+        View userInfoView = ((Activity) context).findViewById(R.id.user);
 
         loginPageView.setVisibility(View.GONE);
         addPollPageView.setVisibility(View.GONE);
+        userInfoView.setVisibility(View.GONE);
         mainPageView.setVisibility(View.VISIBLE);
 
         Log.d("redirecting", "redirecting to main page...");
 
         Button searchBtn = ((Activity) context).findViewById(R.id.search_polls_btn);
         Button loginBtn = ((Activity) context).findViewById(R.id.site_login);
-        Button addPollBtn = ((Activity) context).findViewById(R.id.add_poll_btn);
 
         fetchPolls();
 
@@ -73,17 +74,24 @@ public class MainPage extends MainActivity {
             }
         });
 
-        addPollBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPollPage = new AddPollPage(context, user);
-            }
-        });
-
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 searchPolls(view);
+            }
+        });
+
+        Button addPollBtn = ((Activity) context).findViewById(R.id.add_poll_btn);
+
+        if (user == null) {
+            addPollBtn.setVisibility(View.GONE);
+            return;
+        }
+
+        addPollBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPollPage = new AddPollPage(context, user);
             }
         });
     }
@@ -175,7 +183,7 @@ public class MainPage extends MainActivity {
         Log.d("click", "click");
     }
 
-    public void appendVotes(LinearLayout optionsContainer, ArrayList<VoteForOption> votes, int pollId) {
+    public void appendVotes(LinearLayout optionsContainer, ArrayList<VoteForOption> votes, String pollId) {
         optionsContainer.removeAllViews();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -222,7 +230,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void getVotes(LinearLayout optionsContainer, int pollId) {
+    public void getVotes(LinearLayout optionsContainer, String pollId) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -275,7 +283,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void voteForOption (int optionId, LinearLayout optionsContainer, int pollId) {
+    public void voteForOption (int optionId, LinearLayout optionsContainer, String pollId) {
         if (user == null) return;
 
         try {
@@ -333,7 +341,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void appendOptions(LinearLayout optionsContainer, ArrayList<Option> optionsArray, int pollId) {
+    public void appendOptions(LinearLayout optionsContainer, ArrayList<Option> optionsArray, String pollId) {
         Log.d("options", optionsArray.toString());
 
         for (Option option : optionsArray) {
@@ -354,7 +362,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void fetchOptions(LinearLayout optionsContainer, int pollId) {
+    public void fetchOptions(LinearLayout optionsContainer, String pollId) {
 //        TODO: Fetch all options from the database using polls.id and return array of options
         optionsContainer.removeAllViews();
 
@@ -409,7 +417,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void likePoll(View pollLayout, int pollId) {
+    public void likePoll(View pollLayout, String pollId) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -467,7 +475,7 @@ public class MainPage extends MainActivity {
         }
     }
 
-    public void didUserVote(int userId, LinearLayout options, int pollId) {
+    public void didUserVote(int userId, LinearLayout options, String pollId) {
         try {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 

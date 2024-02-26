@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Poll {
-    public int id;
+    public String id;
     public int user_id;
     public String user;
     public String poll_date;
@@ -18,7 +18,7 @@ public class Poll {
 
     public Poll(JSONObject obj) {
         try {
-            this.id = obj.getInt("id");
+            this.id = obj.getString("id");
             this.user_id = obj.getInt("user_id");
             this.user = obj.isNull("user") ? null : obj.getString("user");
             this.poll_question = obj.getString("poll_question");
