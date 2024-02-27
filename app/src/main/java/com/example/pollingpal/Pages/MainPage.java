@@ -39,6 +39,7 @@ public class MainPage extends MainActivity {
     private Context context;
     public LoginPage loginPage;
     public AddPollPage addPollPage;
+    public RegisterPage registerPage;
     ArrayList<Integer> likedPollsIds = new ArrayList<>();
     public User user;
 
@@ -78,6 +79,15 @@ public class MainPage extends MainActivity {
             @Override
             public void onClick(View view) {
                 searchPolls(view);
+            }
+        });
+
+        Button registerBtn = ((Activity) context).findViewById(R.id.site_register);
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerPage = new RegisterPage(context);
             }
         });
 

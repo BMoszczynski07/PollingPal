@@ -27,15 +27,18 @@ import org.json.JSONObject;
 public class LoginPage extends MainActivity {
     private Context context;
     public UserInformation userInfo;
+    public RegisterPage registerPage;
 
     public LoginPage(Context context) {
         this.context = context;
 
+        View registerPageView = ((Activity) context).findViewById(R.id.site_register_page);
         View mainPageView = ((Activity) context).findViewById(R.id.site_main_page);
         View loginPage = ((Activity) context).findViewById(R.id.site_login_page);
         View addPollPage = ((Activity) context).findViewById(R.id.site_add_poll_page);
 
         loginPage.setVisibility(View.VISIBLE);
+        registerPageView.setVisibility(View.GONE);
         mainPageView.setVisibility(View.GONE);
         addPollPage.setVisibility(View.GONE);
 
@@ -65,6 +68,15 @@ public class LoginPage extends MainActivity {
             @Override
             public void onClick(View view) {
                 mainPage = new MainPage(context, null);
+            }
+        });
+
+        TextView signUp = ((Activity) context).findViewById(R.id.signup);
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerPage = new RegisterPage(context);
             }
         });
     }

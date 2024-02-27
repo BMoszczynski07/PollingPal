@@ -42,5 +42,7 @@
 
     <include layout="@layout/user_information" />
 
+    <include layout="@layout/register" />
+
 
 </LinearLayout>
