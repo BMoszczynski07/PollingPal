@@ -13,7 +13,7 @@ import com.example.pollingpal.Pages.MainPage;
 import com.example.pollingpal.Pages.UserInformation;
 
 public class MainActivity extends AppCompatActivity {
-    public String API = "http://192.168.1.42:8000";
+    public String API = "http://192.168.122.104:8000";
     public MainPage mainPage;
 
     @Override
