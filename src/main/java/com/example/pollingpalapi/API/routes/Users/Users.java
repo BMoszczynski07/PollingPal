@@ -7,13 +7,12 @@ import com.example.pollingpalapi.API.Models.User.UserRegisterDTO;
 import com.example.pollingpalapi.API.Utils.PasswordUtil;
 import com.example.pollingpalapi.API.repositories.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v2/users")
 public class Users {
     private final UserRepository user;
 
@@ -22,7 +21,7 @@ public class Users {
         this.user = user;
     }
 
-    @PostMapping("/users/login")
+    @PostMapping("/login")
     public Response userLogin(@RequestBody UserLoginDTO userDTO) {
         try {
             List<User> foundUsers = user.findUser(userDTO.login);
@@ -42,7 +41,7 @@ public class Users {
         }
     }
 
-    @PostMapping("/users/register")
+    @PostMapping("/register")
     public Response userRegister(@RequestBody UserRegisterDTO userDTO) {
         try {
             System.out.println("/users/register");

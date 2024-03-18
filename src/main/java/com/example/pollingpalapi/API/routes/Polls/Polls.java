@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v2/polls")
 public class Polls {
     private final PollsRepository polls;
 
