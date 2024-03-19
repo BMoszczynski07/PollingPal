@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/pollsdb"
+    username: "root"
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8000
+
+jwt:
+  secret-key: "1ae8cdeffc3af6abd192283ecdb5746e027759a0bdc5c74215bebfb92ca31f49"
