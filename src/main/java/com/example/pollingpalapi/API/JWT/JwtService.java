@@ -38,6 +38,8 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+        extraClaims.put("unique_id", userDetails.getUsername());
+
         return Jwts
                 .builder()
                 .claims(extraClaims)

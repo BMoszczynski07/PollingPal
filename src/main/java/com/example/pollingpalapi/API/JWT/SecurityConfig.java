@@ -23,9 +23,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .authorizeHttpRequests(authorize -> authorize
-//                        // pozostałe konfiguracje
-//                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -37,6 +34,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/v2/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v2/users/register").permitAll()
+                        .requestMatchers("/api/v2/polls/search-polls").permitAll()
+                        .requestMatchers("/api/v2/polls/get-polls/{minusDays}").permitAll()
+                        .requestMatchers("/api/v2/polls/did-user-vote/{pollId}/{userId}").permitAll()
+                        .requestMatchers("/api/v2/polls/get-votes-for-user/{pollId}/{userId}").permitAll()
+                        .requestMatchers("/api/v2/polls/get-votes/{pollId}").permitAll()
+                        .requestMatchers("/api/v2/polls/get-poll-options/{pollId}").permitAll()
                         .anyRequest().authenticated()
                 );
 
