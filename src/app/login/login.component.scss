@@ -1,0 +1,94 @@
+@import "../../global.scss";
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  &__form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  &__input {
+    width: 260px;
+    margin-bottom: 12px;
+    outline: none;
+    padding: 12px 4px;
+    border-radius: 5px;
+    border: 2px solid #cdcdcd;
+    font-size: 16px;
+    font-family: $i;
+    font-weight: 700;
+    letter-spacing: -0.35px;
+    transition: 0.15s;
+
+    &:focus {
+      border: 2px solid $site-color;
+    }
+  }
+
+  &__btn {
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    border: none;
+    padding: 8px 12px;
+    font-size: 17px;
+    margin-top: 18px;
+    background: #1b1b1b;
+    color: #fff;
+    font-family: $dm;
+    font-weight: 600;
+    transform: translateY(0);
+    transition: 0.15s;
+
+    &:hover {
+      transform: translateY(2px);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: #535353;
+    }
+  }
+
+  &__header {
+    font-size: 42px;
+    font-family: $dm;
+    font-weight: 600;
+    padding: 0 12px;
+
+    @media (max-width: 1050px) {
+      font-size: 30px;
+    }
+  }
+
+  &__link {
+    color: #949494;
+
+    &:hover {
+      color: #434343;
+    }
+  }
+
+  &__subtitle {
+    margin-top: 0;
+    font-size: 16px;
+    font-family: $it;
+    padding: 0 12px;
+    margin-bottom: 36px;
+
+    @media (max-width: 450px) {
+      font-size: 13px;
+    }
+  }
+}

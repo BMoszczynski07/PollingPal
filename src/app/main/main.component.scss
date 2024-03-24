@@ -22,6 +22,7 @@
     margin-top: 0;
     font-size: 16px;
     font-family: $it;
+    font-weight: 400;
     padding: 0 12px;
 
     @media (max-width: 450px) {
@@ -36,7 +37,7 @@
     margin: 0 12px;
     padding: 12px;
     font-family: $dm;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 16px;
     cursor: pointer;
     transform: translate(0);
@@ -52,10 +53,10 @@
     }
 
     &--login {
-      background: #2bd708;
+      background: $site-color;
 
       &::after {
-        background: #057b07;
+        background: #05736f;
       }
     }
 

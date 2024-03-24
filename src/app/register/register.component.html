@@ -1,1 +1,40 @@
-<p>register works!</p>
+<div class="register">
+  <app-home></app-home>
+
+  <form (ngSubmit)="handleRegister()" class="register__form">
+    <header class="register__header">Utwórz konto w PollingPal</header>
+    <p class="register__subtitle">
+      Masz już konto?
+      <a routerLink="/login" routerLinkActive="active" class="register__link"
+        >Zaloguj się tutaj</a
+      >
+    </p>
+
+    <div class="register__sections">
+      <div class="register__section register__section--username">
+        <span class="register__sign">&#64;</span>
+
+        <input
+          type="text"
+          placeholder="Nazwa użytkownika"
+          class="register__input register__input--username"
+        />
+      </div>
+
+      <div class="register__section">
+        <input type="text" placeholder="Login" class="register__input" />
+        <input type="password" placeholder="Hasło" class="register__input" />
+        <input
+          type="password"
+          placeholder="Powtórz hasło"
+          class="register__input"
+        />
+        <input type="email" placeholder="Email" class="register__input" />
+      </div>
+
+      <div class="register__section">CAPTCHA</div>
+    </div>
+
+    <button type="submit" class="register__btn">Zarejestruj się</button>
+  </form>
+</div>

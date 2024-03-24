@@ -1,1 +1,13 @@
-<p>login works!</p>
+<div class="login">
+    <app-home></app-home>
+
+    <form (ngSubmit)="handleLogin()" class="login__form">
+        <header class="login__header">Zaloguj się do PollingPal</header>
+        <p class="login__subtitle">Nie posiadasz konta? <a routerLink="/register" routerLinkActive="active" class="login__link">Utwórz nowe konto tutaj</a></p>
+
+        <input type="text" placeholder="Login" [(ngModel)]="formData.login" class="login__input">
+        <input type="password" placeholder="Hasło" [(ngModel)]="formData.password" class="login__input">
+        
+        <button type="submit" class="login__btn">Zaloguj się</button>
+    </form>
+</div>
