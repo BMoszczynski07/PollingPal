@@ -1,0 +1,14 @@
+<div class="main">
+    <app-home></app-home>
+
+    <header class="main__header">Witaj w PollingPal</header>
+    <h5 class="main__subtitle">Zanurz się w świecie ankiet i wymieniaj opinie z ludźmi z całego świata</h5>
+
+    <div class="main__btns">
+        <button class="main__btn main__btn--login" routerLink="/login" routerLinkActive="active" (ngClick)="handleLogin()">
+                Zaloguj się
+        </button>
+        <button class="main__btn main__btn--register" routerLink="/register" routerLinkActive="active" (ngClick)="handleRegister()">Zarejestruj się
+        </button>
+    </div>
+</div>
